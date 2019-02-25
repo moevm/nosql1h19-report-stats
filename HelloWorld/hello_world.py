@@ -122,6 +122,18 @@ class DataBase:
 
         return inserted_id
 
+    def save_reports(self, reports):
+        insterted_ids = []
+        for report in reports:
+            insert_result = self.db['reports'].insert_one(report.serialize_db())
+            insterted_ids.append(insert_result.inserted_id)
+            self.last_inserted_reports.appendleft({
+                'id': inserted_id,
+                'report': report
+            })
+
+        return insterted_ids
+
     def get_report_by_id(self, report_id):
         return ReportFromDB(**self.db['reports'].find_one({'_id': report_id}, {'_id': 0}))
 
