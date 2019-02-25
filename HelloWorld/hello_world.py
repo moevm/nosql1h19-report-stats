@@ -3,7 +3,7 @@ from docx import Document
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
-from collections import Counter, deque
+from collections import Counter, deque, namedtuple
 
 import pymorphy2
 
@@ -96,7 +96,8 @@ class Report:
         return document
 
     def compare_shingles(shingles_x, shingles_y):
-        return len(set(shingles_x) & set(shingles_y))
+ReportFromDB = namedtuple('ReportFromDB', 
+['title', 'meta', 'clean_text', 'tokens', 'shingles', 'most_popular_words', 'num_unique_words'])
 
 class DataBase:
     def __init__(self, url, db_name):
@@ -115,19 +116,23 @@ class DataBase:
         return inserted_id
 
     def get_report_by_id(self, report_id):
-        return self.db['reports'].find_one({'_id': report_id})
+        return ReportFromDB(**self.db['reports'].find_one({'_id': report_id}, {'_id': 0}))
 
     def get_reports_by_author(self, author):
-        return self.db['reports'].find({'author': author})
+        for report in self.db['reports'].find({'meta.author': author}, {'_id': 0}):
+            yield ReportFromDB(**report)
 
     def get_reports_by_group(self, group):
-        return self.db['reports'].find({'group': group})
+        for report in self.db['reports'].find({'meta.group': group}):
+            yield ReportFromDB(**report)
     
     def get_reports_by_faculty(self, faculty):
-        return self.db['reports'].find({'faculty': faculty})
+        for report in self.db['reports'].find({'meta.faculty': faculty}):
+            yield ReportFromDB(**report)
 
     def get_reports_by_course(self, course):
-        return self.db['reports'].find({'course': course})
+        for report in self.db['reports'].find({'meta.course': course}):
+            yield ReportFromDB(**report)
 
 if __name__ == "__main__":
     text_processor = TextProcessor()
@@ -147,4 +152,8 @@ if __name__ == "__main__":
     print(f'inserted id: {inserted_id}')
 
     report_from_db = db.get_report_by_id(inserted_id)
-    print(f'from db by id [title]: {report_from_db["title"]}')
+    print(f'from db by id [title]: {report_from_db.title}')
+
+    reports_from_db = db.get_reports_by_author('rybin')
+    for report in reports_from_db:
+        print(f'from db by author [title]: {report.title}')
