@@ -111,10 +111,11 @@ class DataBase:
         return inserted_id
 
     def save_reports(self, reports):
-        insterted_ids = []
-        for report in reports:
-            insert_result = self.db['reports'].insert_one(report.serialize_db())
-            insterted_ids.append(insert_result.inserted_id)
+        reports_to_insert = map(lambda report: report.serialize_db(), reports)
+        insert_result = self.db['reports'].insert_many(reports_to_insert)
+        insterted_ids = insert_result.insterted_ids
+
+        for report, inserted_id in zip(reversed(reports), insterted_ids):
             self.last_inserted_reports.appendleft({
                 'id': inserted_id,
                 'report': report
