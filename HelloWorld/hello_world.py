@@ -68,6 +68,8 @@ class Report:
         self.clean_text, self.tokens, self.shingles = text_processor.process(self.raw_text)
 
         self.words_counter = Counter(self.tokens)
+        self.most_popular_words = self.words_counter.most_common(10)
+        self.num_unique_words = len(self.words_counter)
 
     def most_popular_words(self, num=10):
         return self.words_counter.most_common(num)
@@ -87,8 +89,8 @@ class Report:
             'clean_text': self.clean_text,
             'tokens': self.tokens,
             'shingles': self.shingles,
-            'most_popular_words': self.most_popular_words(),
-            'num_unique_words': self.num_unique_words()
+            'most_popular_words': self.most_popular_words,
+            'num_unique_words': self.num_unique_words
         }
 
         return document
@@ -139,7 +141,7 @@ if __name__ == "__main__":
         'faculty': 'FKTI'
         }, text_processor)
 
-    print(f'5 most used words: {report.most_popular_words(5)}')
+    print(f'most used words: {report.most_popular_words}')
 
     inserted_id = db.save_report(report)
     print(f'inserted id: {inserted_id}')
