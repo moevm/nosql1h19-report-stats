@@ -96,6 +96,13 @@ class Report:
         return document
 
     def compare_shingles(shingles_x, shingles_y):
+        x = set(shingles_x)
+        y = set(shingles_y)
+
+        min_len = len(x) if len(x) < len(y) else len(y)
+
+        return len(x & y) / min_len * 100.0
+
 ReportFromDB = namedtuple('ReportFromDB', 
 ['title', 'meta', 'clean_text', 'tokens', 'shingles', 'most_popular_words', 'num_unique_words'])
 
