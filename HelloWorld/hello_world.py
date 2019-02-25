@@ -19,8 +19,8 @@ class TextProcessor:
     def __init__(self, shingle_len=10, extra_stop_words=[]):
         self.shingle_len = shingle_len
         self.punctuation_re = re.compile(f'[{re.escape(string.punctuation)}]')
-        self.digits_re = re.compile('\d+')
-        self.no_words_re = re.compile('\W+')
+        self.digits_re = re.compile(r'\d+')
+        self.no_words_re = re.compile(r'\W+')
         self.stop_words = stopwords.words('russian') + extra_stop_words
         self.morph = pymorphy2.MorphAnalyzer()
         
