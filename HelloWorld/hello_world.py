@@ -71,12 +71,6 @@ class Report:
         self.most_popular_words = self.words_counter.most_common(10)
         self.num_unique_words = len(self.words_counter)
 
-    def most_popular_words(self, num=10):
-        return self.words_counter.most_common(num)
-
-    def num_unique_words(self):
-        return len(self.words_counter)
-
     def serialize_db(self):
         document = {
             'title': self.title,
