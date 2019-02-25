@@ -1,19 +1,13 @@
-from docx import Document
-
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-
+import binascii
+import re
+import string
 from collections import Counter, deque, namedtuple
 
-import pymorphy2
-
-import re
-
-import string
-
-import binascii
-
 import pymongo
+import pymorphy2
+from docx import Document
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 class TextProcessor:
     def __init__(self, shingle_len=10, extra_stop_words=[]):
