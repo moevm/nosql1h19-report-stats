@@ -154,24 +154,85 @@ class DataBase:
         self.db['reports'].drop()
 
     def get_report_by_id(self, report_id):
-        return ReportFromDB(**self.db['reports'].find_one({'_id': report_id}, {'_id': 0}))
+        return self.db['reports'].find_one({'_id': report_id})
 
     def get_reports_by_author(self, author):
-        for report in self.db['reports'].find({'author': author}, {'_id': 0}):
-            yield ReportFromDB(**report)
+        for report in self.db['reports'].find({'author': author}):
+            yield report
 
     def get_reports_by_group(self, group):
-        for report in self.db['reports'].find({'group': group}, {'_id': 0}):
-            yield ReportFromDB(**report)
+        for report in self.db['reports'].find({'group': group}):
+            yield report
     
     def get_reports_by_faculty(self, faculty):
-        for report in self.db['reports'].find({'faculty': faculty}, {'_id': 0}):
-            yield ReportFromDB(**report)
+        for report in self.db['reports'].find({'faculty': faculty}):
+            yield report
 
     def get_reports_by_course(self, course):
-        for report in self.db['reports'].find({'course': course}, {'_id': 0}):
-            yield ReportFromDB(**report)
+        for report in self.db['reports'].find({'course': course}):
+            yield report
 
+    def get_reports_by_department(self, department):
+        for report in self.db['reports'].find({'department': department}):
+            yield report
+
+    def get_stat_of_group(self, group):
+        return self.db['reports'].aggregate([
+            {'$match': {'group': group}},
+            {'$group': {
+                '_id': '$author', 
+                'avg_total_words': {'$avg': '$words.total_words'},
+                'avg_unique_words': {'$avg': '$words.unique_words'},
+                'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
+                'most_popular_words': {'$addToSet': '$words.most_popular_words'},
+                'avg_total_raw_symbols': {'$avg': '$symbols.total_raw_symbols'},
+                'avg_total_clean_symbols': {'$avg': '$symbols.total_clean_symbols'}
+                }},
+            {'$sort': {'_id': 1, 'avg_unique_words': -1}}
+        ])
+
+    def get_stat_by_groups(self, course=None, faculty=None, department=None):
+        group = {
+            '$group': {
+                '_id': '$group',
+                'avg_total_words': {'$avg': '$words.total_words'},
+                'avg_unique_words': {'$avg': '$words.unique_words'},
+                'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
+                'avg_total_raw_symbols': {'$avg': '$symbols.total_raw_symbols'},
+                'avg_total_clean_symbols': {'$avg': '$symbols.total_clean_symbols'}
+            }}
+
+        sort = {'$sort': {'_id': 1}}
+
+        if not course and not faculty and not department:
+            return self.db['reports'].aggregate([
+                group,
+                sort
+            ])
+
+        if course and not faculty and not department:
+            match = {'$match': {'course': course}}
+        elif faculty and not course and not department:
+            match = {'$match': {'faculty': faculty}}
+        elif department and not course and not faculty:
+            match = {'$match': {'department': department}}
+        elif course and faculty or course and department or faculty and department:
+            match_list = []
+            if course:
+                match_list.append({'course': course})
+            if faculty:
+                match_list.append({'faculty': faculty})
+            if department:
+                match_list.append({'department': department})
+
+            match = {'$match': {'$and': match_list}}
+
+        return self.db['reports'].aggregate([
+            match,
+            group,
+            sort
+        ])
+        
 if __name__ == "__main__":
     text_processor = TextProcessor()
     db = DataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
