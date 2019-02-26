@@ -184,7 +184,8 @@ class ReportsDataBase:
                 'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
                 'most_popular_words': {'$addToSet': '$words.most_popular_words'},
                 'avg_total_raw_symbols': {'$avg': '$symbols.total_raw_symbols'},
-                'avg_total_clean_symbols': {'$avg': '$symbols.total_clean_symbols'}
+                'avg_total_clean_symbols': {'$avg': '$symbols.total_clean_symbols'},
+                'total_reports_loaded': {'$sum': 1}
                 }},
             {'$sort': {'_id': 1, 'avg_unique_words': -1}}
         ])
@@ -196,8 +197,7 @@ class ReportsDataBase:
                 'avg_total_words': {'$avg': '$words.total_words'},
                 'avg_unique_words': {'$avg': '$words.unique_words'},
                 'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
-                'avg_total_raw_symbols': {'$avg': '$symbols.total_raw_symbols'},
-                'avg_total_clean_symbols': {'$avg': '$symbols.total_clean_symbols'}
+                'total_reports_loaded': {'$sum': 1}
             }}
 
         sort = {'$sort': {'_id': 1}}
