@@ -273,9 +273,13 @@ if __name__ == "__main__":
         for report in db.get_reports_by_group(6304):
             print(f'author: [{report["author"]}] title: [{report["title"]}] group: [{report["group"]}]')
 
-        print('stat of group:')
+        print('stat of group 6304:')
         for result in db.get_stat_of_group(6304):
-            print(f'author: [{result["_id"]}] avg_unique_words: [{result["avg_unique_words"]}] group: [{report["group"]}]')
+            print(f'author: [{result["_id"]}] avg_unique_words: [{result["avg_unique_words"]}]')
+
+        print('stat of groups:')
+        for result in db.get_stat_by_groups():
+            print(f'group: [{result["_id"]}] total_reports_loaded: [{result["total_reports_loaded"]}]')        
     elif action == 2:
         # Очистка коллекции с отчетами
 
