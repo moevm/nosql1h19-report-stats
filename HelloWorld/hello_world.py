@@ -1,9 +1,3 @@
-actions = '''
-    - [0] для тестирования кода в секции для теста
-    - [1] для загрузки нового отчёта в БД
-    - [2] очистить БД
-'''
-
 import binascii
 import re
 import string
@@ -231,6 +225,12 @@ class ReportsDataBase:
         ])
         
 if __name__ == "__main__":
+    actions = '''
+        - [0] для тестирования кода в секции для теста
+        - [1] для загрузки нового отчёта в БД
+        - [2] очистить БД
+    '''
+    
     text_processor = TextProcessor()
     db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 
