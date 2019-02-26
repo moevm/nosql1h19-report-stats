@@ -212,16 +212,20 @@ class ReportsDataBase:
             match = {'$match': {'course': course}}
         elif faculty and not course and not department:
             match = {'$match': {'faculty': faculty}}
+            sort = {'$sort': {'_id': 1, 'faculty': 1}}
         elif department and not course and not faculty:
             match = {'$match': {'department': department}}
+            sort = {'$sort': {'_id': 1, 'department': 1}}
         elif course and faculty or course and department or faculty and department:
             match_list = []
             if course:
                 match_list.append({'course': course})
             if faculty:
                 match_list.append({'faculty': faculty})
+                sort['$sort']['faculty'] = 1
             if department:
                 match_list.append({'department': department})
+                sort['$sort']['department'] = 1
 
             match = {'$match': {'$and': match_list}}
 
