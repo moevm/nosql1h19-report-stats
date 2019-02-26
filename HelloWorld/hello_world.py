@@ -64,7 +64,9 @@ class TextProcessor:
         self.processed_text['words']['shingles'] = shingles
 
     def process(self, raw_text):
-        self.processed_text.clear()
+        self.processed_text['text'].clear()
+        self.processed_text['words'].clear()
+        self.processed_text['symbols'].clear()
 
         self._clean_raw_text(raw_text)
         self._tokenize(self.processed_text['text']['clean_text'])
