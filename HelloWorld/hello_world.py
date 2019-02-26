@@ -18,35 +18,52 @@ class TextProcessor:
         self.stop_words = stopwords.words('russian') + extra_stop_words
         self.morph = pymorphy2.MorphAnalyzer()
         
-    def clean_raw_text(self, raw_text):
-        raw_text = raw_text.lower()
-        raw_text = self.punctuation_re.sub('', raw_text)
-        raw_text = self.digits_re.sub('', raw_text)
-        raw_text = self.no_words_re.sub(' ', raw_text)
+        self.processed_text = dict()
+        self.processed_text['symbols'] = dict()
+        self.processed_text['text'] = dict()
+        self.processed_text['words'] = dict()
 
-        return raw_text
+    def _clean_raw_text(self, raw_text):
+        self.processed_text['text']['raw_text'] = raw_text
+        self.processed_text['symbols']['total_raw_symbols'] = len(raw_text)
 
-    def tokenize(self, text):
+        clean_text = raw_text.lower()
+        clean_text = self.punctuation_re.sub('', clean_text)
+        clean_text = self.digits_re.sub('', clean_text)
+        clean_text = self.no_words_re.sub(' ', clean_text)
+
+        self.processed_text['text']['clean_text'] = clean_text
+        self.processed_text['symbols']['total_clean_symbols'] = len(clean_text)
+
+    def _tokenize(self, text):
         raw_words = word_tokenize(text)
         clean_words = [word for word in raw_words if word not in self.stop_words]
         normal_words = [self.morph.parse(word)[0].normal_form for word in clean_words]
 
-        return normal_words
+        self.processed_text['words']['words'] = normal_words
+        self.processed_text['words']['total_words'] = len(normal_words)
 
-    def get_shingles(self, text):
+        words_counter = Counter(normal_words)
+
+        self.processed_text['words']['unique_words'] = len(words_counter)
+        self.processed_text['words']['most_popular_words'] = words_counter.most_common(10)
+        self.processed_text['words']['persent_unique_words'] = self.processed_text['words']['unique_words'] / self.processed_text['words']['total_words'] * 100.0
+
+    def _get_shingles(self, text):
         shingles = [] 
         for i in range(len(text) - (self.shingle_len - 1)):
             shingles.append(binascii.crc32(' '.join([x for x in text[i : i + self.shingle_len]]).encode('utf-8')))
 
-        return shingles
+        self.processed_text['words']['shingles'] = shingles
 
     def process(self, raw_text):
-        clean_text = self.clean_raw_text(raw_text)
-        tokens = self.tokenize(clean_text)
-        shingles = self.get_shingles(tokens)
+        self.processed_text.clear()
 
-        return clean_text, tokens, shingles
+        self._clean_raw_text(raw_text)
+        self._tokenize(self.processed_text['text']['clean_text'])
+        self._get_shingles(self.processed_text['words']['words'])
     
+        return self.processed_text
 class Report:
     def __init__(self, docx_text, meta, text_processor):
         self.document = Document(docx_text)
@@ -58,12 +75,11 @@ class Report:
         self.course = meta['course']
         self.faculty = meta['faculty']
         
-        self.raw_text = ' '.join([par.text for par in self.document.paragraphs])
-        self.clean_text, self.tokens, self.shingles = text_processor.process(self.raw_text)
+        processed_text = text_processor.process(raw_text)
 
-        self.words_counter = Counter(self.tokens)
-        self.most_popular_words = self.words_counter.most_common(10)
-        self.num_unique_words = len(self.words_counter)
+        self.text = processed_text['text']
+        self.words = processed_text['words']
+        self.symbols = processed_text['symbols']
 
     def serialize_db(self):
         document = {
