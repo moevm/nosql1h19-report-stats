@@ -82,6 +82,7 @@ class Report:
         self.title = meta['title']
         self.author = meta['author']
         self.group = meta['group']
+        self.department = meta['department']
         self.course = meta['course']
         self.faculty = meta['faculty']
         
@@ -98,6 +99,8 @@ class Report:
             'date': self.date,
             'author': self.author,
             'group': self.group,
+            'department': self.department,
+            'course': self.course,
             'faculty': self.faculty,
             'text': self.text,
             'words': self.words,
