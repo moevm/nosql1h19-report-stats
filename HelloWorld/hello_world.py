@@ -118,9 +118,6 @@ class Report:
 
         return len(x & y) / min_len * 100.0
 
-ReportFromDB = namedtuple('ReportFromDB', 
-['title', 'date', 'author', 'group', 'faculty', 'text', 'words', 'symbols'])
-
 class DataBase:
     def __init__(self, url, db_name):
         self.db = pymongo.MongoClient(url)[db_name]
@@ -251,7 +248,7 @@ if __name__ == "__main__":
         meta['faculty'] = input('Факультет ')
 
         report = Report(path, meta, text_processor)
-    inserted_id = db.save_report(report)
+        inserted_id = db.save_report(report)
         print(f'inserted_id: {inserted_id}')
     elif action == 0:
         # Для тестирования
