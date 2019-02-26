@@ -217,10 +217,10 @@ class ReportsDataBase:
             match = {'$match': {'course': course}}
         elif faculty and not course and not department:
             match = {'$match': {'faculty': faculty}}
-            sort = {'$sort': {'_id': 1, 'faculty': 1}}
+            sort['$sort']['faculty'] = 1
         elif department and not course and not faculty:
             match = {'$match': {'department': department}}
-            sort = {'$sort': {'_id': 1, 'department': 1}}
+            sort['$sort']['department'] = 1
         elif course and faculty or course and department or faculty and department:
             match_list = []
             if course:
