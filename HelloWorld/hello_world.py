@@ -52,7 +52,8 @@ class TextProcessor:
         words_counter = Counter(normal_words)
 
         self.processed_text['words']['unique_words'] = len(words_counter)
-        self.processed_text['words']['most_popular_words'] = words_counter.most_common(10)
+        most_popular_words = list(map(lambda word: word[0], words_counter.most_common(5)))
+        self.processed_text['words']['most_popular_words'] = most_popular_words
         self.processed_text['words']['persent_unique_words'] = self.processed_text['words']['unique_words'] / self.processed_text['words']['total_words'] * 100.0
 
     def _get_shingles(self, text):
