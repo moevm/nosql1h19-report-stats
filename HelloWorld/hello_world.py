@@ -115,6 +115,13 @@ class Report:
 class ReportsDataBase:
     def __init__(self, url, db_name):
         self.db = pymongo.MongoClient(url)[db_name]
+
+        self.db['reports'].create_index({'author': 1})
+        self.db['reports'].create_index({'group': 1})
+        self.db['reports'].create_index({'faculty': 1})
+        self.db['reports'].create_index({'department': 1})
+        self.db['reports'].create_index({'group': 1, 'course': 1, 'faculty': 1, 'department': 1})
+        
         self.last_inserted_reports = deque(maxlen=15)
 
     def save_report(self, report):
@@ -230,7 +237,7 @@ if __name__ == "__main__":
         - [1] для загрузки нового отчёта в БД
         - [2] очистить БД
     '''
-    
+
     text_processor = TextProcessor()
     db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 
