@@ -17,12 +17,12 @@ class TextProcessor:
         self.no_words_re = re.compile(r'\W+')
         self.stop_words = stopwords.words('russian') + extra_stop_words
         self.morph = pymorphy2.MorphAnalyzer()
-        
+
         self.processed_text = dict()
         self.processed_text['symbols'] = dict()
         self.processed_text['text'] = dict()
         self.processed_text['words'] = dict()
-
+        
     def _clean_raw_text(self, raw_text):
         self.processed_text['text']['raw_text'] = raw_text
         self.processed_text['symbols']['total_raw_symbols'] = len(raw_text)
@@ -62,19 +62,21 @@ class TextProcessor:
         self._clean_raw_text(raw_text)
         self._tokenize(self.processed_text['text']['clean_text'])
         self._get_shingles(self.processed_text['words']['words'])
-    
+
         return self.processed_text
+    
 class Report:
     def __init__(self, docx_text, meta, text_processor):
         self.document = Document(docx_text)
+        
         self.date = self.document.core_properties.modified
-
         self.title = meta['title']
         self.author = meta['author']
         self.group = meta['group']
         self.course = meta['course']
         self.faculty = meta['faculty']
         
+        raw_text = ' '.join([par.text for par in self.document.paragraphs])
         processed_text = text_processor.process(raw_text)
 
         self.text = processed_text['text']
@@ -82,22 +84,18 @@ class Report:
         self.symbols = processed_text['symbols']
 
     def serialize_db(self):
-        document = {
+        serialized_document = {
             'title': self.title,
-            'meta': {
-                'date': self.date,
-                'author': self.author,
-                'group': self.group,
-                'faculty': self.faculty
-            },
-            'clean_text': self.clean_text,
-            'tokens': self.tokens,
-            'shingles': self.shingles,
-            'most_popular_words': self.most_popular_words,
-            'num_unique_words': self.num_unique_words
+            'date': self.date,
+            'author': self.author,
+            'group': self.group,
+            'faculty': self.faculty,
+            'text': self.text,
+            'words': self.words,
+            'symbols': self.symbols
         }
 
-        return document
+        return serialized_document
 
     def compare_shingles(shingles_x, shingles_y):
         x = set(shingles_x)
@@ -108,7 +106,7 @@ class Report:
         return len(x & y) / min_len * 100.0
 
 ReportFromDB = namedtuple('ReportFromDB', 
-['title', 'meta', 'clean_text', 'tokens', 'shingles', 'most_popular_words', 'num_unique_words'])
+['title', 'date', 'author', 'group', 'faculty', 'text', 'words', 'symbols'])
 
 class DataBase:
     def __init__(self, url, db_name):
@@ -143,19 +141,19 @@ class DataBase:
         return ReportFromDB(**self.db['reports'].find_one({'_id': report_id}, {'_id': 0}))
 
     def get_reports_by_author(self, author):
-        for report in self.db['reports'].find({'meta.author': author}, {'_id': 0}):
+        for report in self.db['reports'].find({'author': author}, {'_id': 0}):
             yield ReportFromDB(**report)
 
     def get_reports_by_group(self, group):
-        for report in self.db['reports'].find({'meta.group': group}):
+        for report in self.db['reports'].find({'group': group}, {'_id': 0}):
             yield ReportFromDB(**report)
     
     def get_reports_by_faculty(self, faculty):
-        for report in self.db['reports'].find({'meta.faculty': faculty}):
+        for report in self.db['reports'].find({'faculty': faculty}, {'_id': 0}):
             yield ReportFromDB(**report)
 
     def get_reports_by_course(self, course):
-        for report in self.db['reports'].find({'meta.course': course}):
+        for report in self.db['reports'].find({'course': course}, {'_id': 0}):
             yield ReportFromDB(**report)
 
 if __name__ == "__main__":
@@ -170,7 +168,7 @@ if __name__ == "__main__":
         'faculty': 'FKTI'
         }, text_processor)
 
-    print(f'most used words: {report.most_popular_words}')
+    print(f'most used words: {report.words["most_popular_words"]}')
 
     inserted_id = db.save_report(report)
     print(f'inserted id: {inserted_id}')
