@@ -116,11 +116,16 @@ class ReportsDataBase:
     def __init__(self, url, db_name):
         self.db = pymongo.MongoClient(url)[db_name]
 
-        self.db['reports'].create_index({'author': 1})
-        self.db['reports'].create_index({'group': 1})
-        self.db['reports'].create_index({'faculty': 1})
-        self.db['reports'].create_index({'department': 1})
-        self.db['reports'].create_index({'group': 1, 'course': 1, 'faculty': 1, 'department': 1})
+        self.db['reports'].create_index('author')
+        self.db['reports'].create_index('group')
+        self.db['reports'].create_index('faculty')
+        self.db['reports'].create_index('department')
+        self.db['reports'].create_index([
+            ('group', pymongo.ASCENDING), 
+            ('course', pymongo.ASCENDING), 
+            ('faculty', pymongo.ASCENDING), 
+            ('department', pymongo.ASCENDING)
+        ])
         
         self.last_inserted_reports = deque(maxlen=15)
 
