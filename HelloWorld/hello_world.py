@@ -118,7 +118,7 @@ class Report:
 
         return len(x & y) / min_len * 100.0
 
-class DataBase:
+class ReportsDataBase:
     def __init__(self, url, db_name):
         self.db = pymongo.MongoClient(url)[db_name]
         self.last_inserted_reports = deque(maxlen=15)
@@ -232,7 +232,7 @@ class DataBase:
         
 if __name__ == "__main__":
     text_processor = TextProcessor()
-    db = DataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
+    db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 
     action = int(input(actions))
     if action == 1:
