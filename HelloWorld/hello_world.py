@@ -1,3 +1,9 @@
+actions = '''
+    - [0] для тестирования кода в секции для теста
+    - [1] для загрузки нового отчёта в БД
+    - [2] очистить БД
+'''
+
 import binascii
 import re
 import string
@@ -97,6 +103,7 @@ class Report:
 
         return serialized_document
 
+    @staticmethod
     def compare_shingles(shingles_x, shingles_y):
         x = set(shingles_x)
         y = set(shingles_y)
@@ -137,6 +144,9 @@ class DataBase:
 
         return insterted_ids
 
+    def _drop_reports(self):
+        self.db['reports'].drop()
+
     def get_report_by_id(self, report_id):
         return ReportFromDB(**self.db['reports'].find_one({'_id': report_id}, {'_id': 0}))
 
@@ -160,22 +170,35 @@ if __name__ == "__main__":
     text_processor = TextProcessor()
     db = DataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 
-    report = Report('IDZRybinA_S_Var_15.docx', {
-        'title': 'Курсовая по БД',
-        'author': 'rybin', 
-        'group': 6304,
-        'course': 2,
-        'faculty': 'FKTI'
-        }, text_processor)
+    action = int(input(actions))
+    if action == 1:
+        # Вставка нового отчета в БД
 
-    print(f'most used words: {report.words["most_popular_words"]}')
+        meta = dict()
+        path = input('Путь до файла docx ')
+        meta['title'] = input('Название ')
+        meta['author'] = input('Автор ')
+        meta['group'] = int(input('Группа '))
+        meta['department'] = input('Кафедра ')
+        meta['course'] = int(input('Курс '))
+        meta['faculty'] = input('Факультет ')
 
+        report = Report(path, meta, text_processor)
     inserted_id = db.save_report(report)
-    print(f'inserted id: {inserted_id}')
+        print(f'inserted_id: {inserted_id}')
+    elif action == 0:
+        # Для тестирования
 
-    report_from_db = db.get_report_by_id(inserted_id)
-    print(f'from db by id [title]: {report_from_db.title}')
+        print('query by group all reports in db:')
+        for report in db.get_reports_by_group(6304):
+            print(f'author: [{report["author"]}] title: [{report["title"]}] group: [{report["group"]}]')
 
-    reports_from_db = db.get_reports_by_author('rybin')
-    for report in reports_from_db:
-        print(f'from db by author [title]: {report.title}')
+        print('stat of group:')
+        for result in db.get_stat_of_group(6304):
+            print(f'author: [{result["_id"]}] avg_unique_words: [{result["avg_unique_words"]}] group: [{report["group"]}]')
+    elif action == 2:
+        # Очистка коллекции с отчетами
+
+        db._drop_reports()
+    else:
+        raise ValueError
