@@ -45,10 +45,10 @@ class TextProcessor:
 
         words_counter = Counter(normal_words)
 
-        self.processed_text['words']['unique_words'] = len(words_counter)
-        most_popular_words = list(map(lambda word: word[0], words_counter.most_common(5)))
+        self.processed_text['words']['total_unique_words'] = len(words_counter)
+        most_popular_words = list(map(lambda word: word[0], words_counter.most_common(self.num_unique_words)))
         self.processed_text['words']['most_popular_words'] = most_popular_words
-        self.processed_text['words']['persent_unique_words'] = self.processed_text['words']['unique_words'] / self.processed_text['words']['total_words'] * 100.0
+        self.processed_text['words']['persent_unique_words'] = self.processed_text['words']['total_unique_words'] / self.processed_text['words']['total_words'] * 100.0
 
     def process(self, raw_text):
         self.processed_text['text'].clear()
@@ -159,7 +159,7 @@ class ReportsDataBase:
             {'$group': {
                 '_id': '$author', 
                 'avg_total_words': {'$avg': '$words.total_words'},
-                'avg_unique_words': {'$avg': '$words.unique_words'},
+                'avg_unique_words': {'$avg': '$words.total_unique_words'},
                 'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
                 'most_popular_words': {'$addToSet': '$words.most_popular_words'},
                 'avg_total_raw_symbols': {'$avg': '$symbols.total_raw_symbols'},
@@ -174,7 +174,7 @@ class ReportsDataBase:
             '$group': {
                 '_id': '$group',
                 'avg_total_words': {'$avg': '$words.total_words'},
-                'avg_unique_words': {'$avg': '$words.unique_words'},
+                'avg_unique_words': {'$avg': '$words.total_unique_words'},
                 'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
                 'total_reports_loaded': {'$sum': 1}
             }}
