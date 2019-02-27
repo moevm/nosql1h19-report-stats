@@ -134,11 +134,14 @@ class ReportsDataBase:
         return self.db['reports'].find_one({'_id': report_id})
 
     def get_reports_by_author(self, author):
-        for report in self.db['reports'].find({'author': author}).sort({'author': 1}):
+        for report in self.db['reports'].find({'author': author}).sort('author'):
             yield report
 
     def get_reports_by_group(self, group):
-        for report in self.db['reports'].find({'group': group}).sort({'author': 1, 'group': 1}):
+        for report in self.db['reports'].find({'group': group}).sort([
+            ('author', pymongo.ASCENDING),
+            ('group', pymongo.ASCENDING)
+        ]):
             yield report
     
     def get_reports_by_faculty(self, faculty):
