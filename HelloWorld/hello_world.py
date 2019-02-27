@@ -250,7 +250,7 @@ if __name__ == "__main__":
         for report in db.get_reports_by_group(6304):
             print(f'''
                     title: [{report["title"]}] 
-                    num_unique_words: [{report["words"]["unique_words"]}]
+                    num_unique_words: [{report["words"]["total_unique_words"]}]
                     most_popular_words: [{report["words"]["most_popular_words"]}]
                     ''')
 
