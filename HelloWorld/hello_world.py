@@ -246,9 +246,13 @@ if __name__ == "__main__":
     elif action == 0:
         # Для тестирования
 
-        print('query by group all reports in db:')
+        print('query by group 6304 all reports in db:')
         for report in db.get_reports_by_group(6304):
-            print(f'author: [{report["author"]}] title: [{report["title"]}] group: [{report["group"]}]')
+            print(f'''
+                    title: [{report["title"]}] 
+                    num_unique_words: [{report["words"]["unique_words"]}]
+                    most_popular_words: [{report["words"]["most_popular_words"]}]
+                    ''')
 
         print('stat of group 6304:')
         for result in db.get_stat_of_group(6304):
