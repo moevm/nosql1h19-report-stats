@@ -117,9 +117,12 @@ class ReportsDataBase:
         self.db = pymongo.MongoClient(url)[db_name]
 
         self.db['reports'].create_index('author')
-        self.db['reports'].create_index('group')
-        self.db['reports'].create_index('faculty')
-        self.db['reports'].create_index('department')
+        
+        self.db['reports'].create_index([
+            ('author', pymongo.ASCENDING),
+            ('group', pymongo.ASCENDING)
+        ])
+        
         self.db['reports'].create_index([
             ('group', pymongo.ASCENDING), 
             ('course', pymongo.ASCENDING), 
@@ -160,11 +163,11 @@ class ReportsDataBase:
         return self.db['reports'].find_one({'_id': report_id})
 
     def get_reports_by_author(self, author):
-        for report in self.db['reports'].find({'author': author}):
+        for report in self.db['reports'].find({'author': author}).sort({'author': 1}):
             yield report
 
     def get_reports_by_group(self, group):
-        for report in self.db['reports'].find({'group': group}):
+        for report in self.db['reports'].find({'group': group}).sort({'author': 1, 'group': 1}):
             yield report
     
     def get_reports_by_faculty(self, faculty):
