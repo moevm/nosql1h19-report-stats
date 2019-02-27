@@ -10,8 +10,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 class TextProcessor:
-    def __init__(self, shingle_len=10, extra_stop_words=[]):
-        self.shingle_len = shingle_len
+    def __init__(self, extra_stop_words=[]):
         self.punctuation_re = re.compile(f'[{re.escape(string.punctuation)}]')
         self.digits_re = re.compile(r'\d+')
         self.no_words_re = re.compile(r'\W+')
@@ -50,13 +49,6 @@ class TextProcessor:
         self.processed_text['words']['most_popular_words'] = most_popular_words
         self.processed_text['words']['persent_unique_words'] = self.processed_text['words']['unique_words'] / self.processed_text['words']['total_words'] * 100.0
 
-    def _get_shingles(self, text):
-        shingles = [] 
-        for i in range(len(text) - (self.shingle_len - 1)):
-            shingles.append(binascii.crc32(' '.join([x for x in text[i : i + self.shingle_len]]).encode('utf-8')))
-
-        self.processed_text['words']['shingles'] = shingles
-
     def process(self, raw_text):
         self.processed_text['text'].clear()
         self.processed_text['words'].clear()
@@ -64,7 +56,6 @@ class TextProcessor:
 
         self._clean_raw_text(raw_text)
         self._tokenize(self.processed_text['text']['clean_text'])
-        self._get_shingles(self.processed_text['words']['words'])
 
         return self.processed_text
     
@@ -103,20 +94,12 @@ class Report:
 
         return serialized_document
 
-    @staticmethod
-    def compare_shingles(shingles_x, shingles_y):
-        x = set(shingles_x)
-        y = set(shingles_y)
-
-        min_len = len(x) if len(x) < len(y) else len(y)
-
-        return len(x & y) / min_len * 100.0
-
 class ReportsDataBase:
     def __init__(self, url, db_name):
         self.db = pymongo.MongoClient(url)[db_name]
 
         self.db['reports'].create_index('author')
+        self.db['reports'].create_index('title')
         
         self.db['reports'].create_index([
             ('author', pymongo.ASCENDING),
@@ -130,16 +113,9 @@ class ReportsDataBase:
             ('department', pymongo.ASCENDING)
         ])
         
-        self.last_inserted_reports = deque(maxlen=15)
-
     def save_report(self, report):
         insert_result = self.db['reports'].insert_one(report.serialize_db())
         inserted_id =  insert_result.inserted_id
-
-        self.last_inserted_reports.appendleft({
-            'id': inserted_id,
-            'report': report
-        })
 
         return inserted_id
 
@@ -147,12 +123,6 @@ class ReportsDataBase:
         reports_to_insert = map(lambda report: report.serialize_db(), reports)
         insert_result = self.db['reports'].insert_many(reports_to_insert)
         insterted_ids = insert_result.insterted_ids
-
-        for report, inserted_id in zip(reversed(reports), insterted_ids):
-            self.last_inserted_reports.appendleft({
-                'id': inserted_id,
-                'report': report
-            })
 
         return insterted_ids
 
