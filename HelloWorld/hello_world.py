@@ -10,12 +10,13 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 class TextProcessor:
-    def __init__(self, extra_stop_words=[]):
+    def __init__(self, extra_stop_words=[], num_unique_words=10):
         self.punctuation_re = re.compile(f'[{re.escape(string.punctuation)}]')
         self.digits_re = re.compile(r'\d+')
         self.no_words_re = re.compile(r'\W+')
         self.stop_words = stopwords.words('russian') + extra_stop_words
         self.morph = pymorphy2.MorphAnalyzer()
+        self.num_unique_words = num_unique_words
 
         self.processed_text = dict()
         self.processed_text['symbols'] = dict()
