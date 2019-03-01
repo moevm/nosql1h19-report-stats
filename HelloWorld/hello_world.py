@@ -133,6 +133,13 @@ class ReportsDataBase:
     def get_report_by_id(self, report_id):
         return self.db['reports'].find_one({'_id': report_id})
 
+    def get_stat_by_id(self, report_id):
+        report = self.get_report_by_id(report_id)
+        report.pop('text', None)
+        report['words'].pop('words', None)
+
+        return report
+
     def get_reports_by_author(self, author):
         for report in self.db['reports'].find({'author': author}).sort('author'):
             yield report
