@@ -152,10 +152,7 @@ class ReportsDataBase:
             yield report
 
     def get_reports_by_group(self, group):
-        for report in self.db['reports'].find({'group': group}).sort([
-            ('author', pymongo.ASCENDING),
-            ('group', pymongo.ASCENDING)
-        ]):
+        for report in self.db['reports'].find({'group': group}).sort('author'):
             yield report
     
     def get_reports_by_faculty(self, faculty):
