@@ -100,6 +100,7 @@ class ReportsDataBase:
     def __init__(self, url, db_name):
         self.db = pymongo.MongoClient(url)[db_name]
 
+        self.db['reports'].create_index('group')
         self.db['reports'].create_index('author')
         self.db['reports'].create_index('title')
         
