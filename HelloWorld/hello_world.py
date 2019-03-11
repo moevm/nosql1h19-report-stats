@@ -148,7 +148,7 @@ class ReportsDataBase:
         return report
 
     def get_reports_by_author(self, author):
-        for report in self.db['reports'].find({'author': author}).sort('author'):
+        for report in self.db['reports'].find({'author': author}).sort('title'):
             yield report
 
     def get_reports_by_group(self, group):
