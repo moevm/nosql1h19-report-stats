@@ -10,13 +10,13 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 class TextProcessor:
-    def __init__(self, extra_stop_words=[], num_unique_words=10):
+    def __init__(self, extra_stop_words=[], num_top_words=25):
         self.punctuation_re = re.compile(f'[{re.escape(string.punctuation)}]')
         self.digits_re = re.compile(r'\d+')
         self.no_words_re = re.compile(r'\W+')
         self.stop_words = stopwords.words('russian') + extra_stop_words
         self.morph = pymorphy2.MorphAnalyzer()
-        self.num_unique_words = num_unique_words
+        self.num_top_words = num_top_words
 
         self.processed_text = dict()
         self.processed_text['symbols'] = dict()
@@ -44,10 +44,11 @@ class TextProcessor:
         self.processed_text['words']['total_words'] = len(normal_words)
 
         words_counter = Counter(normal_words)
+        words = list(words_counter)
 
-        self.processed_text['words']['total_unique_words'] = len(words_counter)
-        most_popular_words = list(map(lambda word: word[0], words_counter.most_common(self.num_unique_words)))
-        self.processed_text['words']['most_popular_words'] = most_popular_words
+        self.processed_text['words']['total_unique_words'] = len(words)
+        self.processed_text['words']['unique_words'] = words
+        self.processed_text['words']['most_popular_words'] = words_counter.most_common(self.num_top_words)
         self.processed_text['words']['persent_unique_words'] = self.processed_text['words']['total_unique_words'] / self.processed_text['words']['total_words'] * 100.0
 
     def process(self, raw_text):
