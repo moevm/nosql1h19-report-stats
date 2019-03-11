@@ -105,8 +105,8 @@ class ReportsDataBase:
         self.db['reports'].create_index('title')
         
         self.db['reports'].create_index([
-            ('author', pymongo.ASCENDING),
-            ('group', pymongo.ASCENDING)
+            ('group', pymongo.ASCENDING),
+            ('author', pymongo.ASCENDING)
         ])
         
         self.db['reports'].create_index([
