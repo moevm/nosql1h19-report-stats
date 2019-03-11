@@ -140,8 +140,10 @@ class ReportsDataBase:
 
     def get_stat_by_id(self, report_id):
         report = self.get_report_by_id(report_id)
+        
         report.pop('text', None)
         report['words'].pop('words', None)
+        report['words'].pop('unique_words', None)
 
         return report
 
