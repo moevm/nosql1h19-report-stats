@@ -132,8 +132,8 @@ class ReportsDataBase:
 
         return insterted_ids
 
-    def _drop_reports(self):
-        self.db['reports'].drop()
+    def update_report(self, report_id, update_dict):
+        self.db['reports'].update_one({'_id': report_id}, {'$set': update_dict})
 
     def get_report_by_id(self, report_id):
         return self.db['reports'].find_one({'_id': report_id})
