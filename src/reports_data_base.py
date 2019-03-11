@@ -15,7 +15,6 @@ class ReportsDataBase:
         
         self.db['reports'].create_index([
             ('group', pymongo.ASCENDING), 
-            ('course', pymongo.ASCENDING), 
             ('faculty', pymongo.ASCENDING), 
             ('department', pymongo.ASCENDING)
         ])
