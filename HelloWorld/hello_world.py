@@ -167,6 +167,25 @@ class ReportsDataBase:
         for report in self.db['reports'].find({'department': department}):
             yield report
 
+    def get_stat_of_author(self, author):
+        cur = self.db['reports'].aggregate([
+            {'$match': {'author': author}},
+            {'$group': {
+                '_id': None, 
+                'avg_total_words': {'$avg': '$words.total_words'},
+                'avg_unique_words': {'$avg': '$words.total_unique_words'},
+                'avg_persent_unique_words': {'$avg': '$words.persent_unique_words'},
+                'unique_words': {'$addToSet': '$words.unique_words'},
+                'total_unique_words': {'$size': '$unique_words'},
+                'avg_total_raw_symbols': {'$avg': '$symbols.total_raw_symbols'},
+                'avg_total_clean_symbols': {'$avg': '$symbols.total_clean_symbols'},
+                'total_reports_loaded': {'$sum': 1}
+                }
+            }
+        ])
+
+        return cur.next()
+
     def get_stat_of_group(self, group):
         return self.db['reports'].aggregate([
             {'$match': {'group': group}},
