@@ -116,6 +116,9 @@ class ReportsDataBase:
             ('department', pymongo.ASCENDING)
         ])
         
+    def _drop_reports(self):
+        self.db['reports'].drop()
+        
     def save_report(self, report):
         insert_result = self.db['reports'].insert_one(report.serialize_db())
         inserted_id =  insert_result.inserted_id
