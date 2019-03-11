@@ -1,7 +1,6 @@
-import binascii
 import re
 import string
-from collections import Counter, deque, namedtuple
+from collections import Counter
 
 import pymongo
 import pymorphy2
@@ -115,7 +114,7 @@ class ReportsDataBase:
             ('faculty', pymongo.ASCENDING), 
             ('department', pymongo.ASCENDING)
         ])
-        
+
     def _drop_reports(self):
         self.db['reports'].drop()
         
