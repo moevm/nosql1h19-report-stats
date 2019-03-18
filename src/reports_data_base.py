@@ -38,6 +38,15 @@ class ReportsDataBase:
     def update_report(self, report_id, update_dict):
         self.db['reports'].update_one({'_id': report_id}, {'$set': update_dict})
 
+    def get_all_faculties(self):
+        return self.db['reports'].distinct('faculty')
+
+    def get_all_courses(self):
+        return self.db['reports'].distinct('course')
+
+    def get_all_departments(self):
+        return self.db['reports'].distinct('department')
+
     def get_report_by_id(self, report_id):
         return self.db['reports'].find_one({'_id': report_id})
 
