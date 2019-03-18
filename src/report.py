@@ -16,7 +16,11 @@ class Report:
         processed_text = text_processor.process(raw_text)
 
         self.text = processed_text['text']
+        self.text.pop('clean_text', None) # Не храним очищенный текст
+
         self.words = processed_text['words']
+        self.words.pop('words', None) # Не храним все слова
+
         self.symbols = processed_text['symbols']
 
     def serialize_db(self):
