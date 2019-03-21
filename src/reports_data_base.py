@@ -54,7 +54,6 @@ class ReportsDataBase:
         report = self.get_report_by_id(report_id)
         
         report.pop('text', None)
-        report['words'].pop('words', None)
         report['words'].pop('unique_words', None)
 
         return report
