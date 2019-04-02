@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Page</title>
+</head>
+<body>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    Автор<input name=author placeholder="Автор" value={{ data['author'] }}><br>
+    Название отчета<input name=title placeholder="Название отчета" value={{ data['title'] }}><br>
+    Факультет<input name=faculty placeholder="Факультет" value={{ data['faculty'] }}><br>
+    Кафедра<input name=department placeholder="Кафедра" value={{ data['department'] }}><br>
+    Курс<input name=course placeholder="Курс" value={{ data['course'] }}><br>
+    Группа<input name=group placeholder="Группа" value={{ data['group'] }}><br>
+    Файл<input name=file placeholder="Файл" type="file" accept=".docx"><br>
+    <button id="submit">Загрузить</button><br>
+    <h3>{{msg}}</h3>
+</form>
+
+
+</body>
+</html>

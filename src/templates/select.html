@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select statistics</title>
+</head>
+<body>
+
+<form action="/select" method="post">
+    Факультет<input name=faculty placeholder="Факультет" value={{ data['faculty'] }}><br>
+    Кафедра<input name=department placeholder="Кафедра" value={{ data['department'] }}><br>
+    Курс<input name=course placeholder="Курс" value={{ data['course'] }}><br>
+    <button id="submit">Просмотреть</button><br>
+    <h3>{{msg}}</h3>
+</form>
+</body>
+</html>
