@@ -1,4 +1,7 @@
-def validate_input(data, allow_empty=false):
+import os
+
+
+def validate_input(data, allow_empty=False):
     """ Check input dict strings by regex. """
     import re
     p_text = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+$')
@@ -45,7 +48,6 @@ def validate_input(data, allow_empty=false):
 
 
 def generate_secret_key():
-    import os
     return os.urandom(24)
 
 
@@ -58,6 +60,20 @@ def convert_to_meta(form):
         'course': int(form['course']),
         'faculty': form['faculty'],
     }
+
+
+def save_file(file, path):
+    filename = file.filename
+    print(f'[+] Saving file: {filename}')
+    path = os.path.join(path, filename)
+    try:
+        file.save(path)
+        print(f'[+] Saved file: {path}')
+        return path
+
+    except:
+        print(f'[-] File {path} not saved. Error return.')
+        raise OSError("Can't save file")
 
 
 if __name__ == '__main__':

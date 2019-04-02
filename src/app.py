@@ -1,9 +1,12 @@
-import os
+import ast
 
 from flask import Flask, render_template, request, redirect, url_for, session
+
+from database.report import Report
+from database.reports_data_base import ReportsDataBase
+from database.text_processor import TextProcessor
+
 from utils.functions import *
-from database import *
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = generate_secret_key()
@@ -15,15 +18,6 @@ app.db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 app.text_processor = TextProcessor()
 
 
-def save_file(file):
-    print('[+] Saving file:', file)
-    filename = secure_filename(file.filename)
-    path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(path)
-    print('[+] Saved file:', path)
-    return path
-
-
 @app.route('/')
 def main_page():
     return render_template('index.html')
@@ -31,40 +25,73 @@ def main_page():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_page():
+    if request.method == 'GET':
+        return render_template('upload.html', data=request.form)
+
     if request.method == 'POST':
         try:
+            print(request.form)
             code = validate_input(request.form)
         except ValueError as ex:
-            session['input_data'], session['report_stat'] = None, None
             return render_template('upload.html', data=request.form, msg=ex)
 
         if code == 'OK':
-            path = save_file(request.files['file'])
+            try:
+                path = save_file(request.files['file'], app.config['UPLOAD_FOLDER'])
+            except:
+                return render_template('upload.html',
+                                       data=request.form,
+                                       msg='Ошибка загрузки отчета')
 
             session['input_data'] = request.form
             meta = convert_to_meta(request.form)
 
             report = Report(path, meta, app.text_processor)
             os.remove(path)
+            print('[+] Created report')
 
-            id_ = app.db.save_report(report)
-            statistic_from_db = app.db.get_stat_by_id(id_)
-            session['report_stat'] = statistic_from_db['words']
-            return redirect(url_for('report_stat_page'))
+            try:
+                id_ = app.db.save_report(report)
+                print('[+] Saved report in db')
+            except:
+                print('[-] Not saved report')
+                return render_template('upload.html',
+                                       data=request.form,
+                                       msg='Ошибка сохранения отчета в БД')
+
+            try:
+                statistic_from_db = app.db.get_report_by_id(id_)
+
+                stat = {
+                    'total_words': statistic_from_db['words']['total_words'],
+                    'total_unique_words': statistic_from_db['words']['total_unique_words'],
+                    'persent_unique_words': statistic_from_db['words']['persent_unique_words'],
+                    'total_raw_symbols': statistic_from_db['symbols']['total_raw_symbols'],
+                    'total_clean_symbols': statistic_from_db['symbols']['total_clean_symbols']
+                }
+
+                print('[+] Get stat from report successfully')
+                return redirect(url_for('report_stat_page', data=stat))
+
+            except:
+                print("[-] Getting stat from db error")
+                return render_template('upload.html',
+                                       data=request.form,
+                                       msg='Невозможно получить статистику по отчету')
+
         else:
+            print(request.form)
             return render_template('upload.html', data=request.form)
-
-    if request.method == 'GET':
-        return render_template('upload.html', data=request.form)
 
 
 @app.route('/report_stat')
 def report_stat_page():
-    if not session['report_stat']:
+    data = request.args['data']
+
+    if not data:
         return redirect(url_for('main_page'))
 
-    data = session['report_stat']
-    session['report_stat'] = None
+    data = ast.literal_eval(data)
     return render_template('report_stat.html', data=data)
 
 
@@ -108,4 +135,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
