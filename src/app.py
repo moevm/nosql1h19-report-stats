@@ -91,8 +91,7 @@ def report_stat_page():
     if not data:
         return redirect(url_for('main_page'))
 
-    data = ast.literal_eval(data)
-    return render_template('report_stat.html', data=data)
+    return render_template('report_stat.html', data=ast.literal_eval(data))
 
 
 @app.route('/select', methods=['GET', 'POST'])
