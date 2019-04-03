@@ -30,7 +30,6 @@ def upload_page():
 
     if request.method == 'POST':
         try:
-            print(request.form)
             code = validate_input(request.form)
         except ValueError as ex:
             return render_template('upload.html', data=request.form, msg=ex)
@@ -52,7 +51,7 @@ def upload_page():
 
             try:
                 id_ = app.db.save_report(report)
-                print('[+] Saved report in db')
+                print(f'[+] Saved report in db with id:{id_}')
             except:
                 print('[-] Not saved report')
                 return render_template('upload.html',
@@ -61,8 +60,6 @@ def upload_page():
 
             try:
                 statistic_from_db = app.db.get_report_stat_by_id(id_)
-                print(statistic_from_db)
-
                 print('[+] Get stat from report successfully')
                 return redirect(url_for('report_stat_page', data={'words': statistic_from_db['words'],
                                                                   'symbols': statistic_from_db['symbols']}))
