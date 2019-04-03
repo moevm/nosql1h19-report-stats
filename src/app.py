@@ -1,6 +1,6 @@
 import ast
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, json
 
 from database.report import Report
 from database.reports_data_base import ReportsDataBase
@@ -88,37 +88,48 @@ def report_stat_page():
     return render_template('report_stat.html', data=ast.literal_eval(data))
 
 
-@app.route('/select', methods=['GET', 'POST'])
+@app.route('/select')
 def select_page():
     if request.method == 'GET':
-        if 'input_data' in session and session['input_data']:
-            newdict = {key: session['input_data'][key] for key in ['faculty', 'department', 'course']}
-            return render_template('select.html', data=newdict)
-        else:
-            return render_template('select.html', data=request.form)
+        try:
+            faculties = app.db.get_all_faculties()
+            courses = app.db.get_all_courses()
+            departments = app.db.get_all_departments()
+        except:
+            print("[-] Error get list for select page from db")
+            render_template('select.html', msg='Невозможно получить список факультетов/кафедр/групп')
 
-    if request.method == 'POST':
-        # TODO empty strings must be allowed
-        # try:
-        #    code = validate_input(request.form)
-        # except ValueError as ex:
-        #    return render_template('select.html', data=request.form, msg=str(ex))
-
-        course, faculty, department = request.form['course'], request.form['faculty'], request.form['department']
-
-        list_groups = app.db.get_stat_by_groups(course=course, faculty=faculty, department=department)
-        session['list_groups'] = [g for g in list_groups]
-        return redirect(url_for('list_groups_page'))
+        return render_template('select.html',
+                               faculties=faculties,
+                               departments=departments,
+                               courses=courses)
 
 
-@app.route('/list_groups')
-def list_groups_page():
-    if not session['list_groups']:
-        return redirect(url_for('select_page'))
+@app.route('/get_data_for_select', methods=['GET', 'POST'])
+def return_groups_info():
+    try:
+        faculty = request.form['faculty']
+        department = request.form['department']
+        course = request.form['course']
+        print(f'[+] Get data from selectors: {course}, {department}, {faculty}')
+    except:
+        return json.dumps({})
 
-    data = session['list_groups']
-    session['list_groups'] = None
-    return render_template('list_groups.html', data=data)
+    if faculty == 'Любой':
+        faculty = None
+
+    if department == 'Любой':
+        department = None
+
+    if course == 'Любой':
+        course = None
+
+    res = app.db.get_stat_by_groups(course=course, faculty=faculty, department=department)
+
+    data = {}
+    for id, stat in enumerate(res):
+        data[id] = stat
+    return json.dumps(data)
 
 
 @app.route('/logout')
