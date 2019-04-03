@@ -60,18 +60,12 @@ def upload_page():
                                        msg='Ошибка сохранения отчета в БД')
 
             try:
-                statistic_from_db = app.db.get_report_by_id(id_)
-
-                stat = {
-                    'total_words': statistic_from_db['words']['total_words'],
-                    'total_unique_words': statistic_from_db['words']['total_unique_words'],
-                    'persent_unique_words': statistic_from_db['words']['persent_unique_words'],
-                    'total_raw_symbols': statistic_from_db['symbols']['total_raw_symbols'],
-                    'total_clean_symbols': statistic_from_db['symbols']['total_clean_symbols']
-                }
+                statistic_from_db = app.db.get_report_stat_by_id(id_)
+                print(statistic_from_db)
 
                 print('[+] Get stat from report successfully')
-                return redirect(url_for('report_stat_page', data=stat))
+                return redirect(url_for('report_stat_page', data={'words': statistic_from_db['words'],
+                                                                  'symbols': statistic_from_db['symbols']}))
 
             except:
                 print("[-] Getting stat from db error")
