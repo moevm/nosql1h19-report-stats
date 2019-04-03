@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistic for report</title>
+</head>
+<body>
+<div> Слов: {{ data['words']['total_words'] }}</div>
+<div> Уникальных слов: {{ data['words']['total_unique_words'] }}</div>
+<div Популярные слова></div>
+{% for word in data['words']['most_popular_words'] %}
+    <li>{{ word[0] }} - {{ word[1] }}</li>
+{% endfor %}
+
+
+<div> Процент: {{ data['words']['persent_unique_words'] }}</div>
+<div> Количество каких-то символов: {{ data['symbols']['total_raw_symbols'] }}</div>
+<div> Количество еще каких-то символов: {{ data['symbols']['total_clean_symbols'] }}</div>
+
+<button onclick="window.location='/upload';">Загрузить еще</button><br>
+<button onclick="window.location='/select';">Просмотр статистики</button>
+
+</body>
+</html>

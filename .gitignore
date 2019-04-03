@@ -1,2 +1,6 @@
 .vscode/settings.json
 src/__pycache__/
+
+*.xml
+*.pyc
+*.iml
