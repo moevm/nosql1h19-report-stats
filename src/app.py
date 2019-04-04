@@ -101,9 +101,9 @@ def select_page():
             render_template('select.html', msg='Невозможно получить список факультетов/кафедр/групп')
 
         return render_template('select.html',
-                               faculties=faculties,
-                               departments=departments,
-                               courses=courses)
+                               faculties=sorted(faculties),
+                               departments=sorted(departments),
+                               courses=sorted(courses))
 
 
 @app.route('/get_data_for_select', methods=['GET', 'POST'])
