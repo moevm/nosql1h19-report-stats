@@ -125,6 +125,12 @@ def return_groups_info():
     if course == 'Любой':
         course = None
 
+    try:
+        if course:
+            course = int(course)
+    except:
+        return json.dumps({})
+
     res = app.db.get_stat_by_groups(course=course, faculty=faculty, department=department)
 
     data = {}
