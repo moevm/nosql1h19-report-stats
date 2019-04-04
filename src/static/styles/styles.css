@@ -16,6 +16,15 @@
     margin-top: 20%;
 }
 
-.card-content {
+.my-card-content {
     margin: 20% auto;
+}
+
+.upload-card {
+    margin-top: 5%;
+}
+
+.upload-error {
+    margin-top: 15px;
+    color: #ef5350;
 }

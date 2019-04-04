@@ -3,21 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>Upload Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="../static/styles/styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+    <div class="container h-100">
+        <div class="row align-items-center h-100 align-center">
+            <div class="col"></div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 center-align">
+                <div class="card white h-100 justify-content-center upload-card">
+                    <div class="card-content">
 
-<form action="/upload" method="post" enctype="multipart/form-data">
-    Автор<input name=author placeholder="Автор" value={{ data['author'] }}><br>
-    Название отчета<input name=title placeholder="Название отчета" value={{ data['title'] }}><br>
-    Факультет<input name=faculty placeholder="Факультет" value={{ data['faculty'] }}><br>
-    Кафедра<input name=department placeholder="Кафедра" value={{ data['department'] }}><br>
-    Курс<input name=course placeholder="Курс" value={{ data['course'] }}><br>
-    Группа<input name=group placeholder="Группа" value={{ data['group'] }}><br>
-    Файл<input name=file placeholder="Файл" type="file" accept=".docx"><br>
-    <button id="submit">Загрузить</button><br>
-    <h3>{{msg}}</h3>
-</form>
+                            <form action="/upload" method="post" enctype="multipart/form-data">
 
+                                <div class="input-field">
+                                    <input type="text" id="author" name=author value={{ data['author'] }}>
+                                        <label for="author">Автор</label>
+                                </div>
+            
+                                <div class="input-field">
+                                    <input type="text" id="title" name=title value={{ data['title'] }}>
+                                        <label for="title">Название отчета</label>
+                                </div>
+                                
+                                <div class="input-field">
+                                    <input type="text" id="faculty" name=faculty value={{ data['faculty'] }}>
+                                        <label for="faculty">Факультет</label>
+                                </div>
+                                
+                                <div class="input-field">
+                                    <input type="text" id="department" name=department value={{ data['department'] }}>
+                                        <label for="department">Кафедра</label>
+                                </div>
+                                
+                                <div class="input-field">
+                                    <input type="text" id="course" name=course value={{ data['course'] }}>
+                                        <label for="course">Курс</label>
+                                </div>
+            
+                                <div class="input-field">
+                                    <input type="text" id="group" name=group data-length="4" value={{ data['group'] }}>
+                                        <label for="group">Группа</label>
+                                </div>
+                                
+                                <div class="file-field input-field">
+                                    <div class="btn">
+                                        <span>Файл</span>
+                                        <input type="file">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path" id="file" name=file type="text" accept=".docx">
+                                    </div>
+                                </div>
+                                <button id="submit" type="submit" class="btn waves-effect waves-light">
+                                    Загрузить
+                                    <i class="material-icons right">cloud_upload</i>
+                                </button>
+                                <div class="upload-error">{{msg}}</div>
+                            </form>
 
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="../static/js/upload.js"></script>
 </body>
 </html>
