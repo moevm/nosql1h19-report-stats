@@ -100,10 +100,12 @@ def select_page():
             print("[-] Error get list for select page from db")
             render_template('select.html', msg='Невозможно получить список факультетов/кафедр/групп')
 
+        create_selectors = lambda x: ['Любой'] + sorted(x) if x else ['Любой']
+
         return render_template('select.html',
-                               faculties=sorted(faculties),
-                               departments=sorted(departments),
-                               courses=sorted(courses))
+                               faculties=create_selectors(faculties),
+                               departments=create_selectors(departments),
+                               courses=create_selectors(courses))
 
 
 @app.route('/get_data_for_select', methods=['GET', 'POST'])
