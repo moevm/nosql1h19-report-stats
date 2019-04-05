@@ -58,10 +58,10 @@ def upload_page():
                                        msg='Ошибка сохранения отчета в БД')
 
             try:
-                statistic_from_db = app.db.get_report_stat_by_id(id_)
+                statistics_from_db = app.db.get_report_stat_by_id(id_)
                 print('[+] Get stat from report successfully')
-                return redirect(url_for('report_stat_page', data={'words': statistic_from_db['words'],
-                                                                  'symbols': statistic_from_db['symbols']}))
+                return redirect(url_for('report_stat_page', data={'words': statistics_from_db['words'],
+                                                                  'symbols': statistics_from_db['symbols']}))
 
             except:
                 print("[-] Getting stat from db error")
@@ -84,26 +84,26 @@ def report_stat_page():
         return redirect(url_for('main_page'))
 
 
-@app.route('/select')
-def select_page():
+@app.route('/groups')
+def groups_page():
     if request.method == 'GET':
         try:
             faculties, courses, departments = app.db.get_all_faculties(), \
                                               app.db.get_all_courses(), \
                                               app.db.get_all_departments()
         except:
-            print("[-] Error get list for select page from db")
-            render_template('select.html', msg='Невозможно получить список факультетов/кафедр/групп')
+            print("[-] Error get list for groups page from db")
+            render_template('groups.html', msg='Невозможно получить список факультетов/кафедр/групп')
 
         create_selectors = lambda x: ['Любой'] + sorted(x) if x else ['Любой']
 
-        return render_template('select.html',
+        return render_template('groups.html',
                                faculties=create_selectors(faculties),
                                departments=create_selectors(departments),
                                courses=create_selectors(courses))
 
 
-@app.route('/get_data_for_select', methods=['GET', 'POST'])
+@app.route('/groups_stat', methods=['GET', 'POST'])
 def return_groups_info():
     try:
         faculty, department, course = request.form['faculty'], request.form['department'], request.form['course']
