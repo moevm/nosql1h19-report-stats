@@ -18,6 +18,10 @@ app.db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 app.text_processor = TextProcessor()
 
 
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
 @app.route('/')
 def main_page():
     return render_template('index.html')

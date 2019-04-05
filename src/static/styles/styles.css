@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.my-btn ~ .my-btn {
+    margin-bottom: 0%;
+}
+
+.my-btn {
+    margin-bottom: 20%;
+    min-width: 250px;
+}
+
+.my-card {
+    margin-top: 20%;
+}
+
+.my-card-content {
+    margin: 20% auto;
+}
+
+.upload-card {
+    margin-top: 5%;
+}
+
+.upload-error {
+    margin-top: 15px;
+    color: #ef5350;
+}
