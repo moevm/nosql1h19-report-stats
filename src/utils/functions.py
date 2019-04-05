@@ -63,6 +63,9 @@ def convert_to_meta(form):
 
 
 def save_file(file, path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
     filename = file.filename
     print(f'[+] Saving file: {filename}')
     path = os.path.join(path, filename)
