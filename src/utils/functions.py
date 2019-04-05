@@ -9,7 +9,7 @@ def validate_input(data, allow_empty=False):
     p_course = re.compile(r'^[1-6]$')
     p_title = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:\d]+$')
     p_fac = re.compile(r'^(?:ФКТИ|ФЭЛ|ФРТ|ОФ|ФЭМ|ГФ|ФИБС|ФЭА)$')
-    p_file = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+\.docx$')
+    p_file = re.compile(r'^[\w,\s-]+.docx$')
 
     error_string = 'Поле "{}" {}'
 
@@ -31,10 +31,10 @@ def validate_input(data, allow_empty=False):
              'error': 'должно быть числом от 1 до 6'},
         'group':
             {'name': 'Группа', 'regex': p_group,
-             'error': 'должно быть четырзначным числом'},
+             'error': 'должно быть четырехзначным числом'},
         'file':
             {'name': 'Файл', 'regex': p_file,
-             'error': 'должно оканчиваться на .docx и не содержать спец.символы'},
+             'error': 'должно оканчиваться на .docx'},
     }
 
     for key, value in data.items():
