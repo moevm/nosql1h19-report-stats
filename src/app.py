@@ -18,10 +18,6 @@ app.db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 app.text_processor = TextProcessor()
 
 
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
-
 @app.route('/')
 def main_page():
     return render_template('index.html')
@@ -46,7 +42,6 @@ def upload_page():
                                        data=request.form,
                                        msg='Ошибка загрузки отчета')
 
-            session['input_data'] = request.form
             meta = convert_to_meta(request.form)
 
             report = Report(path, meta, app.text_processor)
@@ -83,19 +78,19 @@ def upload_page():
 def report_stat_page():
     data = request.args['data']
 
-    if not data:
+    if data:
+        return render_template('report_stat.html', data=ast.literal_eval(data))
+    else:
         return redirect(url_for('main_page'))
-
-    return render_template('report_stat.html', data=ast.literal_eval(data))
 
 
 @app.route('/select')
 def select_page():
     if request.method == 'GET':
         try:
-            faculties = app.db.get_all_faculties()
-            courses = app.db.get_all_courses()
-            departments = app.db.get_all_departments()
+            faculties, courses, departments = app.db.get_all_faculties(), \
+                                              app.db.get_all_courses(), \
+                                              app.db.get_all_departments()
         except:
             print("[-] Error get list for select page from db")
             render_template('select.html', msg='Невозможно получить список факультетов/кафедр/групп')
@@ -111,29 +106,19 @@ def select_page():
 @app.route('/get_data_for_select', methods=['GET', 'POST'])
 def return_groups_info():
     try:
-        faculty = request.form['faculty']
-        department = request.form['department']
-        course = request.form['course']
+        faculty, department, course = request.form['faculty'], request.form['department'], request.form['course']
         print(f'[+] Get data from selectors: {course}, {department}, {faculty}')
     except:
         return json.dumps({})
 
-    if faculty == 'Любой':
-        faculty = None
-
-    if department == 'Любой':
-        department = None
-
-    if course == 'Любой':
-        course = None
-
     try:
-        if course:
-            course = int(course)
+        course = int(course) if course != 'Любой' else None
     except:
         return json.dumps({})
 
-    res = app.db.get_stat_by_groups(course=course, faculty=faculty, department=department)
+    res = app.db.get_stat_by_groups(course=course,
+                                    faculty=faculty if faculty != 'Любой' else None,
+                                    department=department if department != 'Любой' else None)
 
     data = {}
     for id, stat in enumerate(res):
