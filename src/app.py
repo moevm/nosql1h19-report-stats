@@ -126,6 +126,29 @@ def return_groups_info():
     return json.dumps(data)
 
 
+@app.route('/groups/<int:group_num>')
+def group_stat_page(group_num):
+    try:
+        groups = app.db.get_stat_by_groups()
+    except:
+        return render_template('error_page.html', msg='No groups in database')
+
+    if group_num in [g['_id'] for g in groups]:
+        try:
+            stat = app.db.get_stat_of_group(int(group_num))
+        except:
+            return render_template('error_page.html', msg=f"Can't get statistics for group {group_num}")
+
+        data = []
+        for person in stat:
+            del person['unique_words']
+            data.append(person)
+
+        return render_template('group_stat.html', data=data, group_num=group_num)
+
+    else:
+        return render_template('error_page.html', msg=f"No such group in database: {group_num}")
+
 @app.route('/logout')
 def logout():
     session.clear()
