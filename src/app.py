@@ -131,13 +131,13 @@ def group_stat_page(group_num):
     try:
         groups = app.db.get_stat_by_groups()
     except:
-        return render_template('error_page.html', msg='No groups in database')
+        return render_template('error_page.html', msg='Невозможно получить список групп из базы данных')
 
     if group_num in [g['_id'] for g in groups]:
         try:
             stat = app.db.get_stat_of_group(int(group_num))
         except:
-            return render_template('error_page.html', msg=f"Can't get statistics for group {group_num}")
+            return render_template('error_page.html', msg=f"Невозможно получить статистику для группы {group_num}")
 
         data = []
         for person in stat:
@@ -147,7 +147,7 @@ def group_stat_page(group_num):
         return render_template('group_stat.html', data=data, group_num=group_num)
 
     else:
-        return render_template('error_page.html', msg=f"No such group in database: {group_num}")
+        return render_template('error_page.html', msg=f"Группа {group_num} не найдена в базе данных")
 
 @app.route('/logout')
 def logout():
