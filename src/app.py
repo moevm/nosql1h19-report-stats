@@ -149,6 +149,44 @@ def group_stat_page(group_num):
     else:
         return render_template('error_page.html', msg=f"Группа {group_num} не найдена в базе данных")
 
+
+@app.route('/groups/<int:group_num>/<person>')
+def person_stat_page(group_num, person):
+    try:
+        groups = app.db.get_stat_by_groups()
+        if group_num not in [g['_id'] for g in groups]:
+            raise Exception()
+        stat = app.db.get_stat_of_group(int(group_num))
+        if person not in [p['_id'] for p in stat]:
+            raise Exception()
+    except:
+        return render_template('error_page.html', msg=f'{person} не найден в группе {group_num}')
+
+    try:
+        total_person_stat = app.db.get_stat_of_author(person)
+        del total_person_stat['unique_words']
+    except:
+        return render_template('error_page.html', msg=f'Невозможно подсчитать статистику для {person}')
+
+    try:
+        report_stat = []
+        for report in app.db.get_reports_by_author(person):
+            print(report)
+            report_stat.append({
+                'title': report['title'],
+                'total_words': report['words']['total_words'],
+                'total_unique_words': report['words']['total_unique_words'],
+                'persent_unique_words': report['words']['persent_unique_words']
+            })
+    except:
+        return render_template('error_page.html', msg=f'Невозможно подсчитать статистику по отчетам для {person}')
+
+    return render_template('person.html',
+                           person=person,
+                           total_person_stat=total_person_stat,
+                           report_stat=report_stat)
+
+
 @app.route('/logout')
 def logout():
     session.clear()
