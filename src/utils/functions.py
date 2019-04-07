@@ -4,10 +4,10 @@ import os
 def validate_input(data, allow_empty=False):
     """ Check input dict strings by regex. """
     import re
-    p_text = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+$')
+    p_text = re.compile(r'^[\w\d _-]+$')
     p_group = re.compile(r'^\d{4}$')
     p_course = re.compile(r'^[1-6]$')
-    p_title = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:\d]+$')
+    p_title = re.compile(r'^[^ @_!#$%^&*()<>?\/|}{~:\d]+$')
     p_fac = re.compile(r'^(?:ФКТИ|ФЭЛ|ФРТ|ОФ|ФЭМ|ГФ|ФИБС|ФЭА)$')
     p_file = re.compile(r'^[\w,\s-]+.docx$')
 
@@ -19,7 +19,7 @@ def validate_input(data, allow_empty=False):
              'error': 'не должно содержать спец.символы и цифры'},
         'title':
             {'name': 'Название отчета', 'regex': p_text,
-             'error': 'не должно содержать спец.символы'},
+             'error': 'должно содержать только буквы, цифры, символы нижнего подчеркивания и тире'},
         'faculty':
             {'name': 'Факультет', 'regex': p_fac,
              'error': 'должно быть одним из вариантов: ФКТИ, ФЭЛ, ФРТ, ОФ, ФЭМ, ГФ, ФИБС, ФЭА'},
@@ -53,7 +53,7 @@ def generate_secret_key():
 
 def convert_to_meta(form):
     return {
-        'title': form['title'],
+        'title': form['title'].replace(' ', '_'),
         'author': form['author'],
         'group': int(form['group']),
         'department': form['department'],
@@ -66,7 +66,7 @@ def save_file(file, path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    filename = file.filename
+    filename = file.filename.replace(' ', '_')
     print(f'[+] Saving file: {filename}')
     path = os.path.join(path, filename)
     try:
