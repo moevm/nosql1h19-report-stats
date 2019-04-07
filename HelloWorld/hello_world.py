@@ -1,9 +1,9 @@
 import sys
 sys.path.append('../')
 
-from src.text_processor import TextProcessor
-from src.reports_data_base import ReportsDataBase
-from src.report import Report
+from src.database.text_processor import TextProcessor
+from src.database.reports_data_base import ReportsDataBase
+from src.database.report import Report
 
 if __name__ == "__main__":
     actions = '''
