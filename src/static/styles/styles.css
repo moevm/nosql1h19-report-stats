@@ -54,7 +54,13 @@
 }
 
 .rep-word-stats {
+    display: inline;
     white-space: nowrap;
+}
+
+.top-clip{
+    overflow: hidden;
+    text-overflow: clip;
 }
 
 .rep-p,  .rep-num{
@@ -63,6 +69,7 @@
 }
 
 .rep-p {
+    font-weight: 700;
     text-align: left;
 }
 
@@ -73,4 +80,8 @@
 .rep-card-word-content {
     width: 80%;
     margin: 0 auto;
+}
+
+.top-words {
+    display: inline;
 }
