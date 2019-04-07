@@ -3,67 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <title>Статистика групп</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/styles/styles.css">
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script><body>
+<body>
 
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <div class="col"></div>
+            <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 center-align">
+                <div class="card white h-100 group-card">
+                    <div class="group-card-content">
+                        <h6>Статистика по группам</h6>
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-field">
+                                    <select id="select_fac">
+                                        {% for fac in faculties %}
+                                            <option>{{ fac }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="select_fac">Факультет</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-field">
+                                    <select id="select_dep">
+                                        {% for dep in departments %}
+                                            <option>{{ dep }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="select_dep">Кафедра</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-field">
+                                    <select id="select_cour">
+                                        {% for cour in courses %}
+                                            <option>{{ cour }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="select_cour">Курс</label>
+                                </div>     
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="stats-table" class="table table-hover table-bordered my-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Группа</th>
+                                        <th>Средний процент уникальных слов</th>
+                                        <th>Всего слов в среднем</th>
+                                        <th>Уникальных слов в среднем</th>
+                                        <th>Отчетов загружено</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stats-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
 
-
-<select id="select_fac">
-    {% for fac in faculties %}
-        <option>{{ fac }}</option>
-    {% endfor %}
-</select>
-<select id="select_dep">
-    {% for dep in departments %}
-        <option>{{ dep }}</option>
-    {% endfor %}
-</select>
-<select id="select_cour">
-    {% for cour in courses %}
-        <option>{{ cour }}</option>
-    {% endfor %}
-</select>
-
-<h3> Here will be data</h3>
-<div id="data"></div>
-<h3>{{msg}}</h3>
-
-<script>
-        function get_data() {
-            $.ajax({
-                type: "POST",
-                url: "/groups_stat",
-                data: {
-                    'faculty' : $('#select_fac').children("option:selected").val(),
-                    'department' : $('#select_dep').children("option:selected").val(),
-                    'course' : $('#select_cour').children("option:selected").val(),
-                },
-                type: 'POST',
-                success: function(response) {
-                    console.log(response);
-                    var json = jQuery.parseJSON(response);1
-                    $('#data').text(response);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
+    <script>
+            function get_data() {
+                $.ajax({
+                    type: "POST",
+                    url: "/groups_stat",
+                    data: {
+                        'faculty' : $('#select_fac').children("option:selected").val(),
+                        'department' : $('#select_dep').children("option:selected").val(),
+                        'course' : $('#select_cour').children("option:selected").val(),
+                    },
+                    type: 'POST',
+                    success: function(response) {
+                        console.log(response);
+                        var json = jQuery.parseJSON(response);
+                        console.log(Object.keys(json).length);
+                        $('#stats-table-body').remove();
+                        $('#stats-table').append('<tbody id=stats-table-body></tbody>');
+                        for (let i = 0; i < Object.keys(json).length; ++i) {
+                            let row = '<tr><td>' + (i+1) + '</td><td>' + json[i]['_id'] + '</td><td>'
+                                + json[i]['avg_persent_unique_words'].toFixed(0) + '</td><td>'
+                                + json[i]['avg_total_words'].toFixed(0) + '</td><td>'
+                                + json[i]['avg_unique_words'].toFixed() + '</td><td>'
+                                + json[i]['total_reports_loaded'] + '</td></tr>';
+                            $('#stats-table-body').append(row);
+                        }
+                        $('#data').text(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+            $(document).ready(function() {
+                get_data();
             });
-        }
-        $(document).ready(function() {
-            get_data();
-        });
-        $('#select_fac').change(function() {
-            get_data();
-        });
-        $('#select_dep').change(function() {
-            get_data();
-        });
-        $('#select_cour').change(function() {
-            get_data();
-        });
+            $('#select_fac').change(function() {
+                get_data();
+            });
+            $('#select_dep').change(function() {
+                get_data();
+            });
+            $('#select_cour').change(function() {
+                get_data();
+            });
 
-</script>
+    </script>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="../static/js/group_stats.js"></script>
 </body>
 </html>

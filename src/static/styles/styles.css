@@ -23,11 +23,15 @@
 }
 
 .my-card {
-    margin-top: 20%;
+    margin-top: 25%;
+    margin-bottom: 25%;
+    height: 50%;
 }
 
 .rep-card {
-    margin-top: 10%;
+    margin-top: 25%;
+    margin-bottom: 25%;
+    height: 50%;
     padding: 5%;
 }
 
@@ -84,4 +88,37 @@
 
 .top-words {
     display: inline;
+}
+
+.group-card {
+    margin-top: 10%;
+}
+
+.group-card-content {
+    margin: 3% 5%;
+}
+
+.group-card h6 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #26a69a;
+}
+
+td {
+    text-align: center;
+    vertical-align: top;
+}
+
+th {
+    text-align: center;
+    vertical-align: top;
+}
+
+.my-table thead {
+    background-color: #4db6ac;
+}
+
+.table-container{
+    height: 300px;
+    overflow: auto;
 }
