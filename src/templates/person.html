@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика студента: {{ person }}</title>
+</head>
+<body>
+<h1>{{ person }}</h1>
+<h3>There is total stat:</h3>
+<div>{{ total_person_stat }}</div>
+
+<h3>Reports</h3>
+{% for report in report_stat %}
+    <div>{{ report }}</div>
+    <br>
+{% endfor %}
+</body>
+</html>
