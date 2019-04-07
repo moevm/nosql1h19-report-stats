@@ -46,31 +46,25 @@ def upload_page():
 
             report = Report(path, meta, app.text_processor)
             os.remove(path)
-            print('[+] Created report')
 
             try:
                 id_ = app.db.save_report(report)
-                print(f'[+] Saved report in db with id:{id_}')
             except:
-                print('[-] Not saved report')
                 return render_template('upload.html',
                                        data=request.form,
                                        msg='Ошибка сохранения отчета в БД')
 
             try:
                 statistics_from_db = app.db.get_report_stat_by_id(id_)
-                print('[+] Get stat from report successfully')
                 return redirect(url_for('report_stat_page', data={'words': statistics_from_db['words'],
                                                                   'symbols': statistics_from_db['symbols']}))
 
             except:
-                print("[-] Getting stat from db error")
                 return render_template('upload.html',
                                        data=request.form,
                                        msg='Невозможно получить статистику по отчету')
 
         else:
-            print(request.form)
             return render_template('upload.html', data=request.form)
 
 
@@ -107,7 +101,6 @@ def groups_page():
 def return_groups_info():
     try:
         faculty, department, course = request.form['faculty'], request.form['department'], request.form['course']
-        print(f'[+] Get data from selectors: {course}, {department}, {faculty}')
     except:
         return json.dumps({})
 
@@ -171,7 +164,6 @@ def person_stat_page(group_num, person):
     try:
         report_stat = []
         for report in app.db.get_reports_by_author(person):
-            print(report)
             report_stat.append({
                 'title': report['title'],
                 'total_words': report['words']['total_words'],
