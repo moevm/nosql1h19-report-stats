@@ -179,3 +179,60 @@ class ReportsDataBase:
             group,
             sort
         ])
+
+    def get_words_compare(self, authors, group):
+        match_list = []
+        for author in authors:
+            match_list.append({'author': author})
+
+        match = {
+            '$match': {
+                '$and': {
+                    [
+                        'group': group,
+                        '$or': match_list
+                    ]
+                }
+            }
+        }
+
+        query = self.db['reports'].aggregate([
+            match,
+            {'$group:': {
+                '_id': '$author', 
+                'unique_words': {'$addToSet': '$words.unique_words'}
+            }},
+            {'$addFields': {
+                'unique_words': {
+                    '$reduce': {
+                        'input': '$unique_words',
+                        'initialValue': [],
+                        'in': {'$setUnion': ['$$value', '$$this']}
+                    }
+                }
+                }
+            },
+            {'$sort': {'_id': 1}}
+        ])
+
+        compare = {}
+
+        for author in query:
+            compare[author['_id']] = dict()
+
+            for other_author in query:
+                if other_author['_id'] == author['_id']:
+                    compare[author['_id']][author['_id']] = float('nan')
+                else:
+                    author_unique_words = set(author['unique_words']),
+                    other_author_unique_words = set(other_author['unique_words'])))
+
+                    author_num_unique_words = len(author_unique_words)
+                    other_author_num_unique_words = len(other_author_unique_words)
+
+                    compare[author['_id']][other_author['_id']] = len(set.intersection(
+                        author_unique_words,
+                        other_author_unique_words
+                    )) / min(author_num_unique_words, other_author_num_unique_words) * 100.0
+
+        return compare
