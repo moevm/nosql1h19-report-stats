@@ -10,12 +10,12 @@ import matplotlib.pyplot as plt
 def validate_input(data, allow_empty=False):
     """ Check input dict strings by regex. """
     import re
-    p_text = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+$')
+    p_text = re.compile(r'^[^@!#$%^&*()<>?\/|}{~:]+$')
     p_group = re.compile(r'^\d{4}$')
     p_course = re.compile(r'^[1-6]$')
     p_author = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:\d]+$')
     p_fac = re.compile(r'^(?:ФКТИ|ФЭЛ|ФРТ|ОФ|ФЭМ|ГФ|ФИБС|ФЭА)$')
-    p_file = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+.docx$')
+    p_file = re.compile(r'^[^@!#$%^&*()<>?\/|}{~:]+.docx$')
 
     error_string = 'Поле "{}" {}'
 
