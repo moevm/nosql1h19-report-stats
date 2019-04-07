@@ -12,12 +12,36 @@
     min-width: 250px;
 }
 
+.my-rep-btn ~ .my-rep-btn {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.my-rep-btn {
+    margin: 5%;
+    min-width: 250px;
+}
+
 .my-card {
     margin-top: 20%;
 }
 
+.rep-card {
+    margin-top: 10%;
+    padding: 5%;
+}
+
 .my-card-content {
     margin: 20% auto;
+}
+
+.rep-card-content {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.top-words {
+    display: inline;
 }
 
 .upload-card {
@@ -27,4 +51,26 @@
 .upload-error {
     margin-top: 15px;
     color: #ef5350;
+}
+
+.rep-word-stats {
+    white-space: nowrap;
+}
+
+.rep-p,  .rep-num{
+    float: left;
+    width: 50%;
+}
+
+.rep-p {
+    text-align: left;
+}
+
+.rep-num{
+    text-align: right;
+}
+
+.rep-card-word-content {
+    width: 80%;
+    margin: 0 auto;
 }
