@@ -20,7 +20,7 @@
                         <div class="rep-card-word-content">
                             <div class="rep-word-stats"><p class="rep-p">Слов:</p> <p class="rep-num">{{ data['words']['total_words'] }}</p></div>
                             <div class="rep-word-stats"><p class="rep-p">Уникальных слов:</p> <p class="rep-num">{{ data['words']['total_unique_words'] }}</p></div>
-                            <div class="rep-word-stats"><p class="rep-p">Процент уникальных слов:</p> <p class="rep-num">{{ data['words']['persent_unique_words'] }}</p></div>
+                            <div class="rep-word-stats"><p class="rep-p">Процент уникальных слов:</p> <p class="rep-num">{{ data['words']['persent_unique_words'] | round(2, 'common') }}</p></div>
                             <p>Популярные слова</p>
                             {% for word in data['words']['most_popular_words'][:5] %}
                                 <div class="top-words" href="">{{ word[0] }} - {{ word[1] }}</div>
