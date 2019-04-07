@@ -4,3 +4,4 @@ src/__pycache__/
 *.xml
 *.pyc
 *.iml
+src/bar_graphs/*
