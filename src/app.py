@@ -73,28 +73,32 @@ def report_stat_page():
     data = request.args['data']
 
     if data:
-        return render_template('report_stat.html', data=ast.literal_eval(data))
+        try:
+            data = ast.literal_eval(data)
+            return render_template('report_stat.html', data=data)
+        except:
+            return render_template('error_page.html', msg='Невозможно получить статистку по загруженному отчету')
+
     else:
         return redirect(url_for('main_page'))
 
 
 @app.route('/groups')
 def groups_page():
-    if request.method == 'GET':
-        try:
-            faculties, courses, departments = app.db.get_all_faculties(), \
-                                              app.db.get_all_courses(), \
-                                              app.db.get_all_departments()
-        except:
-            print("[-] Error get list for groups page from db")
-            render_template('groups.html', msg='Невозможно получить список факультетов/кафедр/групп')
+    try:
+        faculties, courses, departments = app.db.get_all_faculties(), \
+                                          app.db.get_all_courses(), \
+                                          app.db.get_all_departments()
+    except:
+        print("[-] Error get list for groups page from db")
+        render_template('groups.html', msg='Невозможно получить список факультетов/кафедр/групп')
 
-        create_selectors = lambda x: ['Любой'] + sorted(x) if x else ['Любой']
+    create_selectors = lambda x: ['Любой'] + sorted(x) if x else ['Любой']
 
-        return render_template('groups.html',
-                               faculties=create_selectors(faculties),
-                               departments=create_selectors(departments),
-                               courses=create_selectors(courses))
+    return render_template('groups.html',
+                           faculties=create_selectors(faculties),
+                           departments=create_selectors(departments),
+                           courses=create_selectors(courses))
 
 
 @app.route('/groups_stat', methods=['GET', 'POST'])
