@@ -118,6 +118,10 @@ th {
     background-color: #4db6ac;
 }
 
+.my-table a {
+    color: #4db6ac;
+}
+
 .table-container{
     height: 300px;
     overflow: auto;
