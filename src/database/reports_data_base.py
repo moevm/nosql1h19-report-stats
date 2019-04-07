@@ -224,7 +224,7 @@ class ReportsDataBase:
                     compare[author['_id']][author['_id']] = float('nan')
                 else:
                     author_unique_words = set(author['unique_words']),
-                    other_author_unique_words = set(other_author['unique_words'])))
+                    other_author_unique_words = set(other_author['unique_words'])
 
                     author_num_unique_words = len(author_unique_words)
                     other_author_num_unique_words = len(other_author_unique_words)
