@@ -1,6 +1,6 @@
 import ast
 
-from flask import Flask, render_template, request, redirect, url_for, session, json
+from flask import Flask, render_template, request, redirect, url_for, session, json, send_file
 
 from database.report import Report
 from database.reports_data_base import ReportsDataBase
@@ -181,6 +181,61 @@ def person_stat_page(group_num, person):
                            person=person,
                            total_person_stat=total_person_stat,
                            report_stat=report_stat)
+
+
+def validate_path(group_num, person, report_name):
+    groups = app.db.get_stat_by_groups()
+    if group_num not in [g['_id'] for g in groups]:
+        raise Exception()
+    stat = app.db.get_stat_of_group(int(group_num))
+    if person not in [p['_id'] for p in stat]:
+        raise Exception()
+    reports = app.db.get_reports_by_author(person)
+    if report_name not in [r['title'] for r in reports]:
+        raise Exception()
+
+
+def get_report_by_path(group_num, person, report_name, error_msg):
+    try:
+        validate_path(group_num, person, report_name)
+    except:
+        return None
+
+    m_report = None
+    for report in app.db.get_reports_by_author(person):
+        if report_name == report['title']:
+            m_report = report
+            break
+
+    return m_report
+
+
+@app.route('/groups/<int:group_num>/<person>/<report_name>')
+def report_page(group_num, person, report_name):
+    error_msg = f'Отчет "{report_name}" не найден ' \
+                f'в среди отчетов студента "{person}" группы {group_num}'
+
+    m_report = get_report_by_path(group_num, person, report_name, error_msg)
+
+    if m_report:
+        del m_report['text'], m_report['words']['unique_words'], m_report['words']['most_popular_words']
+        return render_template('report.html', title=report_name, data=m_report)
+    else:
+        return render_template('error_page.html', msg=error_msg)
+
+
+@app.route('/groups/<int:group_num>/<person>/<report_name>/bar_graph')
+def get_image(group_num, person, report_name):
+    error_msg = f'Невозможно построить гистограмму для "{report_name}"' \
+                f'отчета студента "{person}" группы {group_num}'
+
+    m_report = get_report_by_path(group_num, person, report_name, error_msg)
+
+    if m_report:
+        image_name = build_bar_graph(m_report['words']['most_popular_words'])
+        return send_file(image_name, mimetype='image/gif')
+    else:
+        return None
 
 
 @app.route('/logout')

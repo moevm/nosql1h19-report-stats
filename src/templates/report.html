@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика по отчету {{ title }}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script><body>
+</head>
+<body>
+<h1>{{ title }}</h1>
+<div> {{ data }} </div>
+
+<div id="image"></div>
+<script>
+    var img = $("<img />").attr('src', '{{ title }}/bar_graph')
+    .on('load', function() {
+        if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+            alert('broken image!');
+        } else {
+            $("#image").append(img);
+        }
+    });
+</script>
+</body>
+</html>
