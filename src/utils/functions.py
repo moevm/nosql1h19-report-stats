@@ -10,18 +10,18 @@ import matplotlib.pyplot as plt
 def validate_input(data, allow_empty=False):
     """ Check input dict strings by regex. """
     import re
-    p_text = re.compile(r'^[\w\d _-]+$')
+    p_text = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+$')
     p_group = re.compile(r'^\d{4}$')
     p_course = re.compile(r'^[1-6]$')
-    p_title = re.compile(r'^[^ @_!#$%^&*()<>?\/|}{~:\d]+$')
+    p_author = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:\d]+$')
     p_fac = re.compile(r'^(?:ФКТИ|ФЭЛ|ФРТ|ОФ|ФЭМ|ГФ|ФИБС|ФЭА)$')
-    p_file = re.compile(r'^[\w,\s-]+.docx$')
+    p_file = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:]+.docx$')
 
     error_string = 'Поле "{}" {}'
 
     pairs = {
         'author':
-            {'name': 'Автор', 'regex': p_title,
+            {'name': 'Автор', 'regex': p_author,
              'error': 'не должно содержать спец.символы и цифры'},
         'title':
             {'name': 'Название отчета', 'regex': p_text,
@@ -40,7 +40,7 @@ def validate_input(data, allow_empty=False):
              'error': 'должно быть четырехзначным числом'},
         'file':
             {'name': 'Файл', 'regex': p_file,
-             'error': 'должно оканчиваться на .docx'},
+             'error': 'должно оканчиваться на .docx и не содержать спец.символов'},
     }
 
     for key, value in data.items():
@@ -59,7 +59,7 @@ def generate_secret_key():
 
 def convert_to_meta(form):
     return {
-        'title': form['title'].replace(' ', '_'),
+        'title': form['title'],
         'author': form['author'],
         'group': int(form['group']),
         'department': form['department'],
@@ -72,7 +72,7 @@ def save_file(file, path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    filename = file.filename.replace(' ', '_')
+    filename = file.filename
     print(f'[+] Saving file: {filename}')
     path = os.path.join(path, filename)
     try:
