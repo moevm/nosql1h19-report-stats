@@ -187,12 +187,11 @@ class ReportsDataBase:
 
         match = {
             '$match': {
-                '$and': {
+                '$and':
                     [
-                        'group': group,
-                        '$or': match_list
+                        {'group': group},
+                        {'$or': match_list}
                     ]
-                }
             }
         }
 
