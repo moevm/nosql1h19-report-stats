@@ -91,7 +91,7 @@
                         $('#stats-table-body').remove();
                         $('#stats-table').append('<tbody id=stats-table-body></tbody>');
                         for (let i = 0; i < Object.keys(json).length; ++i) {
-                            let row = '<tr><td>' + (i+1) + '</td><td><a href="/groups/' + json[i]['_id'] +'">' + json[i]['_id'] + '</a></td><td>'
+                            let row = '<tr onclick="window.location=' + " ' " + '/groups/' + json[i]['_id'] + " ' " + '"><td>' + (i+1) + '</td><td>' + json[i]['_id'] + '</td><td>'
                                 + json[i]['avg_persent_unique_words'].toFixed(0) + '</td><td>'
                                 + json[i]['avg_total_words'].toFixed(0) + '</td><td>'
                                 + json[i]['avg_unique_words'].toFixed() + '</td><td>'

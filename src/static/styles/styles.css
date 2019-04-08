@@ -118,8 +118,8 @@ th {
     background-color: #4db6ac;
 }
 
-.my-table a {
-    color: #4db6ac;
+.my-table tr[onclick]:hover {
+    cursor: pointer;
 }
 
 .table-container{
