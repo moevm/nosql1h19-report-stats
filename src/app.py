@@ -106,18 +106,29 @@ def return_groups_info():
     return json.dumps(data)
 
 
+def validate_path(group_num, person=None, report_id=None):
+    groups = app.db.get_stat_by_groups()
+    if group_num not in [g['_id'] for g in groups]:
+        raise Exception()
+
+    if person is not None:
+        stat = app.db.get_stat_of_group(int(group_num))
+        if person not in [p['_id'] for p in stat]:
+            raise Exception()
+
+        if report_id is not None:
+            reports = app.db.get_report_stat_by_id(ObjectId(report_id))
+
+
 @app.route('/groups/<int:group_num>')
 def group_stat_page(group_num):
     try:
-        groups = app.db.get_stat_by_groups()
+        validate_path(group_num=group_num)
     except:
         return render_template('error_page.html', msg='Невозможно получить список групп из базы данных')
 
-    if group_num in [g['_id'] for g in groups]:
-        try:
-            stat = app.db.get_stat_of_group(int(group_num))
-        except:
-            return render_template('error_page.html', msg=f"Невозможно получить статистику для группы {group_num}")
+    try:
+        stat = app.db.get_stat_of_group(group_num)
 
         data = []
         for person in stat:
@@ -133,12 +144,7 @@ def group_stat_page(group_num):
 @app.route('/groups/<int:group_num>/<person>')
 def person_stat_page(group_num, person):
     try:
-        groups = app.db.get_stat_by_groups()
-        if group_num not in [g['_id'] for g in groups]:
-            raise Exception()
-        stat = app.db.get_stat_of_group(int(group_num))
-        if person not in [p['_id'] for p in stat]:
-            raise Exception()
+        validate_path(group_num=group_num, person=person)
     except:
         return render_template('error_page.html', msg=f'{person} не найден в группе {group_num}')
 
@@ -166,21 +172,8 @@ def person_stat_page(group_num, person):
                            report_stat=report_stat)
 
 
-def validate_path(group_num, person, report_name):
-    groups = app.db.get_stat_by_groups()
-    if group_num not in [g['_id'] for g in groups]:
-        raise Exception()
-    stat = app.db.get_stat_of_group(int(group_num))
-    if person not in [p['_id'] for p in stat]:
-        raise Exception()
-    reports = app.db.get_reports_by_author(person)
-    if report_name not in [r['title'] for r in reports]:
-        raise Exception()
-
-
-def get_report_by_path(group_num, person, report_name, error_msg):
     try:
-        validate_path(group_num, person, report_name)
+        validate_path(group_num=group_num, person=person, report_id=report_id)
     except:
         return None
 
