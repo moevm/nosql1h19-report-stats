@@ -6,9 +6,14 @@
 </head>
 <body>
 <h1>{{ group_num }}</h1>
-{% for person in data %}
-    <div>{{ person }}</div>
-    <br>
-{% endfor %}
+<form action="/groups/{{ group_num }}" method="post" enctype="multipart/form-data">
+    {% for person in data %}
+        <input type="checkbox" name="compare_{{ person['_id'] }}" value="{{ person['_id'] }}">
+        <div>{{ person }}</div>
+        <br>
+    {% endfor %}
+    <button id="submit" type="submit">Сравнить</button>
+</form>
+
 </body>
 </html>

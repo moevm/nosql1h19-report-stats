@@ -119,7 +119,7 @@ def validate_path(group_num, person=None, report_id=None):
             reports = app.db.get_report_stat_by_id(ObjectId(report_id))
 
 
-@app.route('/groups/<int:group_num>')
+@app.route('/groups/<int:group_num>', methods=['GET', 'POST'])
 def group_stat_page(group_num):
     try:
         validate_path(group_num=group_num)
@@ -127,19 +127,42 @@ def group_stat_page(group_num):
         return render_template('error_page.html',
                                msg=f'Группа {group_num} не найдена в базе данных')
 
+    if request.method == 'GET':
+        try:
+            stat = app.db.get_stat_of_group(group_num)
+
+            data = []
+            for person in stat:
+                del person['unique_words']
+                data.append(person)
+
+            return render_template('group_stat.html', data=data, group_num=group_num)
+
+        except:
+            return render_template('error_page.html',
+                                   msg=f'Невозможно получить статистику группы {group_num} из базы данных')
+
+    if request.method == 'POST':
+        return redirect(url_for('compare_page',
+                                persons=[v for _, v in request.form.items()],
+                                group=group_num))
+
+
+@app.route('/compare')
+def compare_page():
     try:
-        stat = app.db.get_stat_of_group(group_num)
-
-        data = []
-        for person in stat:
-            del person['unique_words']
-            data.append(person)
-
-        return render_template('group_stat.html', data=data, group_num=group_num)
-
+        data = request.args.getlist('persons')
+        group = request.args.get('group')
     except:
         return render_template('error_page.html',
-                               msg=f'Невозможно получить статистику группы {group_num} из базы данных')
+                               msg='Некорректные данные для пересечения словарных запасов')
+    try:
+        res = app.db.get_words_compare(data, group)
+    except Exception as e:
+        return render_template('error_page.html',
+                               msg=f'persons:{data}, group:{group}, error:{e} ')
+
+    return render_template('compare.html', data=res)
 
 
 @app.route('/groups/<int:group_num>/<person>')
@@ -251,8 +274,6 @@ def edit_page(report_id):
                                            msg='Ошибка сохранения отчета')
         else:
             return render_template('edit.html', id=report_id, data=request.form)
-
-
 
 
 @app.route('/logout')
