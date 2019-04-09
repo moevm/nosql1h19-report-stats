@@ -2,7 +2,9 @@ import os
 import shutil
 from time import gmtime, strftime
 
-import matplotlib.pyplot as plt; plt.rcdefaults()
+import matplotlib.pyplot as plt;
+
+plt.rcdefaults()
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,7 +17,7 @@ def validate_input(data, is_empty_file=False):
     p_course = re.compile(r'^[1-6]$')
     p_author = re.compile(r'^[^@_!#$%^&*()<>?\/|}{~:\d]+$')
     p_fac = re.compile(r'^(?:ФКТИ|ФЭЛ|ФРТ|ОФ|ФЭМ|ГФ|ФИБС|ФЭА)$')
-    p_file = re.compile(r'^[^@!#$%^&*()<>?\/|}{~:]+.docx$')
+    p_file = re.compile(r'^[^*<>?\/|}{~:]+.docx$')
 
     error_string = 'Поле "{}" {}'
 
@@ -110,7 +112,6 @@ def build_bar_graph(info):
     fig.savefig(image_name)
 
     return image_name
-
 
 
 if __name__ == '__main__':

@@ -21,32 +21,32 @@
                             <form action="/upload" method="post" enctype="multipart/form-data">
 
                                 <div class="input-field">
-                                    <input type="text" id="author" name=author value={{ data['author'] }}>
+                                    <input type="text" id="author" name=author value='{{ data['author'] }}'>
                                         <label for="author">Автор</label>
                                 </div>
             
                                 <div class="input-field">
-                                    <input type="text" id="title" name=title value={{ data['title'] }}>
+                                    <input type="text" id="title" name=title value='{{ data['title'] }}'>
                                         <label for="title">Название отчета</label>
                                 </div>
                                 
                                 <div class="input-field">
-                                    <input type="text" id="faculty" name=faculty value={{ data['faculty'] }}>
+                                    <input type="text" id="faculty" name=faculty value='{{ data['faculty'] }}'>
                                         <label for="faculty">Факультет</label>
                                 </div>
                                 
                                 <div class="input-field">
-                                    <input type="text" id="department" name=department value={{ data['department'] }}>
+                                    <input type="text" id="department" name=department value='{{ data['department'] }}'>
                                         <label for="department">Кафедра</label>
                                 </div>
                                 
                                 <div class="input-field">
-                                    <input type="text" id="course" name=course value={{ data['course'] }}>
+                                    <input type="text" id="course" name=course value='{{ data['course'] }}'>
                                         <label for="course">Курс</label>
                                 </div>
             
                                 <div class="input-field">
-                                    <input type="text" id="group" name=group data-length="4" value={{ data['group'] }}>
+                                    <input type="text" id="group" name=group data-length="4" value='{{ data['group'] }}'>
                                         <label for="group">Группа</label>
                                 </div>
                                 
@@ -56,7 +56,7 @@
                                         <input type="file" name=file accept=".docx" id="file">
                                     </div>
                                     <div class="file-path-wrapper">
-                                        <input class="file-path" name=file type="text" >
+                                        <input class="file-path" name=file type="text" value='{{ data['file'] }}'>
                                     </div>
                                 </div>
                                 <button id="submit" type="submit" class="btn waves-effect waves-light">
