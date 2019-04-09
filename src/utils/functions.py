@@ -2,9 +2,9 @@ import os
 import shutil
 from time import gmtime, strftime
 
-import matplotlib.pyplot as plt;
-
+import matplotlib.pyplot as plt
 plt.rcdefaults()
+
 import numpy as np
 import matplotlib.pyplot as plt
 

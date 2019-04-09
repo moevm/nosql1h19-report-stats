@@ -1,12 +1,9 @@
-import ast
-
 from bson import ObjectId
 from flask import Flask, render_template, request, redirect, url_for, session, json, send_file
 
 from database.report import Report
 from database.reports_data_base import ReportsDataBase
 from database.text_processor import TextProcessor
-
 from utils.functions import *
 
 app = Flask(__name__)
