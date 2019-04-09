@@ -11,6 +11,7 @@
 
 <h3>Reports</h3>
 {% for report in report_stat %}
+    <div> Link: /groups/{{ group_num }}/{{ person }}/{{ report['id'] }}</div>
     <div>{{ report }}</div>
     <br>
 {% endfor %}

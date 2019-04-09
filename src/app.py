@@ -158,6 +158,7 @@ def person_stat_page(group_num, person):
         report_stat = []
         for report in app.db.get_reports_by_author(person):
             report_stat.append({
+                'id': report['_id'],
                 'title': report['title'],
                 'total_words': report['words']['total_words'],
                 'total_unique_words': report['words']['total_unique_words'],
@@ -168,49 +169,36 @@ def person_stat_page(group_num, person):
 
     return render_template('person.html',
                            person=person,
+                           group_num=group_num,
                            total_person_stat=total_person_stat,
                            report_stat=report_stat)
 
 
+@app.route('/groups/<int:group_num>/<person>/<report_id>')
+def report_page(group_num, person, report_id):
     try:
         validate_path(group_num=group_num, person=person, report_id=report_id)
     except:
-        return None
+        return render_template('error_page.html',
+                               msg=f'Некорректная ссылка. Отчет не найден среди отчетов {person} группы {group_num}')
 
-    m_report = None
-    for report in app.db.get_reports_by_author(person):
-        if report_name == report['title']:
-            m_report = report
-            break
-
-    return m_report
-
-
-@app.route('/groups/<int:group_num>/<person>/<report_name>')
-def report_page(group_num, person, report_name):
-    error_msg = f'Отчет "{report_name}" не найден ' \
-                f'в среди отчетов студента "{person}" группы {group_num}'
-
-    m_report = get_report_by_path(group_num, person, report_name, error_msg)
-
-    if m_report:
-        del m_report['text'], m_report['words']['unique_words'], m_report['words']['most_popular_words']
-        return render_template('report.html', title=report_name, data=m_report)
-    else:
-        return render_template('error_page.html', msg=error_msg)
+    try:
+        report = app.db.get_report_stat_by_id(ObjectId(report_id))
+        return render_template('report.html', title=report['title'], data=report)
+    except:
+        return render_template('error_page.html',
+                               msg=f'Невозможно получить статистику по отчету')
 
 
-@app.route('/groups/<int:group_num>/<person>/<report_name>/bar_graph')
-def get_image(group_num, person, report_name):
-    error_msg = f'Невозможно построить гистограмму для "{report_name}"' \
-                f'отчета студента "{person}" группы {group_num}'
+@app.route('/groups/<int:group_num>/<person>/<report_id>/bar_graph')
+def get_image(group_num, person, report_id):
+    try:
+        validate_path(group_num=group_num, person=person, report_id=report_id)
+        report = app.db.get_report_stat_by_id(ObjectId(report_id))
 
-    m_report = get_report_by_path(group_num, person, report_name, error_msg)
-
-    if m_report:
-        image_name = build_bar_graph(m_report['words']['most_popular_words'])
+        image_name = build_bar_graph(report['words']['most_popular_words'])
         return send_file(image_name, mimetype='image/gif')
-    else:
+    except:
         return None
 
 

@@ -11,7 +11,7 @@
 
 <div id="image"></div>
 <script>
-    var img = $("<img />").attr('src', '{{ title }}/bar_graph')
+    var img = $("<img />").attr('src', '{{ data['_id'] }}/bar_graph')
     .on('load', function() {
         if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
             alert('broken image!');
