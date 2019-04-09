@@ -92,17 +92,13 @@ def groups_page():
 def return_groups_info():
     try:
         faculty, department, course = request.form['faculty'], request.form['department'], request.form['course']
-    except:
-        return json.dumps({})
 
-    try:
         course = int(course) if course != 'Любой' else None
+        res = app.db.get_stat_by_groups(course=course,
+                                        faculty=faculty if faculty != 'Любой' else None,
+                                        department=department if department != 'Любой' else None)
     except:
         return json.dumps({})
-
-    res = app.db.get_stat_by_groups(course=course,
-                                    faculty=faculty if faculty != 'Любой' else None,
-                                    department=department if department != 'Любой' else None)
 
     data = {}
     for id, stat in enumerate(res):
