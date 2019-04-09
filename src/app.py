@@ -206,6 +206,55 @@ def get_image(group_num, person, report_id):
         return None
 
 
+@app.route('/edit/<report_id>', methods=['GET', 'POST'])
+def edit_page(report_id):
+    try:
+        report = app.db.get_report_by_id(ObjectId(report_id))
+    except:
+        return render_template('error_page.html',
+                               msg='Невозможно найти выбранный отчет')
+
+    if request.method == 'GET':
+        return render_template('edit.html', id=report_id, data=report)
+
+    if request.method == 'POST':
+        try:
+            code = validate_input(request.form, is_empty_file=True)
+        except ValueError as ex:
+            return render_template('edit.html', id=report_id, data=request.form, msg=ex)
+
+        if code == 'OK':
+            if 'file' not in request.files.keys() or request.form['file'] == '':
+                print(report_id, serialized_meta(request.form))
+                app.db.update_report(ObjectId(report_id), serialized_meta(request.form))
+                return redirect(f'/groups/{request.form["group"]}/{request.form["author"]}/{report_id}')
+            else:
+                try:
+                    path = save_file(request.files['file'], app.config['UPLOAD_FOLDER'])
+                except:
+                    return render_template('edit.html',
+                                           id=report_id,
+                                           data=request.form,
+                                           msg='Ошибка редактирования отчета')
+
+                report = Report(path, serialized_meta(request.form), app.text_processor)
+                os.remove(path)
+
+                try:
+                    app.db.update_report(ObjectId(report_id), report.serialize_db())
+                    return redirect(f'/groups/{request.form["group"]}/{request.form["author"]}/{report_id}')
+
+                except:
+                    return render_template('edit.html',
+                                           id=report_id,
+                                           data=request.form,
+                                           msg='Ошибка сохранения отчета')
+        else:
+            return render_template('edit.html', id=report_id, data=request.form)
+
+
+
+
 @app.route('/logout')
 def logout():
     session.clear()

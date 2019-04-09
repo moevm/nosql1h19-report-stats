@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def validate_input(data, allow_empty=False):
+def validate_input(data, is_empty_file=False):
     """ Check input dict strings by regex. """
     import re
     p_text = re.compile(r'^[^@!#$%^&*()<>?\/|}{~:]+$')
@@ -45,7 +45,7 @@ def validate_input(data, allow_empty=False):
 
     for key, value in data.items():
         if key in pairs:
-            if allow_empty and not value:
+            if is_empty_file and key == 'file' and value == '':
                 continue
             if not re.match(pairs[key]['regex'], value):
                 raise ValueError(error_string.format(pairs[key]['name'], pairs[key]['error']))
