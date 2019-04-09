@@ -43,9 +43,7 @@ def upload_page():
                                        data=request.form,
                                        msg='Ошибка загрузки отчета')
 
-            meta = convert_to_meta(request.form)
-
-            report = Report(path, meta, app.text_processor)
+            report = Report(path, serialized_meta(request.form), app.text_processor)
             os.remove(path)
 
             try:

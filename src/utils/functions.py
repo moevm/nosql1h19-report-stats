@@ -57,7 +57,7 @@ def generate_secret_key():
     return os.urandom(24)
 
 
-def convert_to_meta(form):
+def serialized_meta(form):
     return {
         'title': form['title'],
         'author': form['author'],
