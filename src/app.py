@@ -1,5 +1,6 @@
 import ast
 
+from bson import ObjectId
 from flask import Flask, render_template, request, redirect, url_for, session, json, send_file
 
 from database.report import Report
@@ -49,15 +50,7 @@ def upload_page():
 
             try:
                 id_ = app.db.save_report(report)
-            except:
-                return render_template('upload.html',
-                                       data=request.form,
-                                       msg='Ошибка сохранения отчета в БД')
-
-            try:
-                statistics_from_db = app.db.get_report_stat_by_id(id_)
-                return redirect(url_for('report_stat_page', data={'words': statistics_from_db['words'],
-                                                                  'symbols': statistics_from_db['symbols']}))
+                return redirect(f'/report_stat/{id_}')
 
             except:
                 return render_template('upload.html',
@@ -68,19 +61,15 @@ def upload_page():
             return render_template('upload.html', data=request.form)
 
 
-@app.route('/report_stat')
-def report_stat_page():
-    data = request.args['data']
-
-    if data:
-        try:
-            data = ast.literal_eval(data)
-            return render_template('report_stat.html', data=data)
-        except:
-            return render_template('error_page.html', msg='Невозможно получить статистку по загруженному отчету')
-
-    else:
-        return redirect(url_for('main_page'))
+@app.route('/report_stat/<id_>')
+def report_stat_page(id_):
+    try:
+        statistics_from_db = app.db.get_report_stat_by_id(ObjectId(id_))
+        return render_template('report_stat.html', data={'words': statistics_from_db['words'],
+                                                         'symbols': statistics_from_db['symbols']})
+    except:
+        return render_template('error_page.html',
+                               msg='Невозможно получить статистку по загруженному отчету')
 
 
 @app.route('/groups')
