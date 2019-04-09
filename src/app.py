@@ -53,8 +53,7 @@ def upload_page():
             except:
                 return render_template('upload.html',
                                        data=request.form,
-                                       msg='Невозможно получить статистику по отчету')
-
+                                       msg='Ошибка сохранения отчета')
         else:
             return render_template('upload.html', data=request.form)
 
@@ -77,8 +76,8 @@ def groups_page():
                                           app.db.get_all_courses(), \
                                           app.db.get_all_departments()
     except:
-        print("[-] Error get list for groups page from db")
-        render_template('groups.html', msg='Невозможно получить список факультетов/кафедр/групп')
+        render_template('groups.html',
+                        msg='Невозможно получить список факультетов/кафедр/групп')
 
     create_selectors = lambda x: ['Любой'] + sorted(x) if x else ['Любой']
 
@@ -125,7 +124,8 @@ def group_stat_page(group_num):
     try:
         validate_path(group_num=group_num)
     except:
-        return render_template('error_page.html', msg='Невозможно получить список групп из базы данных')
+        return render_template('error_page.html',
+                               msg=f'Группа {group_num} не найдена в базе данных')
 
     try:
         stat = app.db.get_stat_of_group(group_num)
@@ -137,8 +137,9 @@ def group_stat_page(group_num):
 
         return render_template('group_stat.html', data=data, group_num=group_num)
 
-    else:
-        return render_template('error_page.html', msg=f"Группа {group_num} не найдена в базе данных")
+    except:
+        return render_template('error_page.html',
+                               msg=f'Невозможно получить статистику группы {group_num} из базы данных')
 
 
 @app.route('/groups/<int:group_num>/<person>')
@@ -146,13 +147,15 @@ def person_stat_page(group_num, person):
     try:
         validate_path(group_num=group_num, person=person)
     except:
-        return render_template('error_page.html', msg=f'{person} не найден в группе {group_num}')
+        return render_template('error_page.html',
+                               msg=f'{person} не найден в группе {group_num}')
 
     try:
         total_person_stat = app.db.get_stat_of_author(person)
         del total_person_stat['unique_words']
     except:
-        return render_template('error_page.html', msg=f'Невозможно подсчитать статистику для {person}')
+        return render_template('error_page.html',
+                               msg=f'Невозможно получить статистику для {person}')
 
     try:
         report_stat = []
@@ -165,7 +168,8 @@ def person_stat_page(group_num, person):
                 'persent_unique_words': report['words']['persent_unique_words']
             })
     except:
-        return render_template('error_page.html', msg=f'Невозможно подсчитать статистику по отчетам для {person}')
+        return render_template('error_page.html',
+                               msg=f'Невозможно получить статистику по отчетам для {person}')
 
     return render_template('person.html',
                            person=person,
