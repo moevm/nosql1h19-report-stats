@@ -1,0 +1,181 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.my-btn ~ .my-btn {
+    margin-bottom: 0%;
+}
+
+.my-btn {
+    margin-bottom: 20%;
+    min-width: 250px;
+}
+
+.gbtn-group {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.my-gbtn ~ .my-gbtn {
+    margin-right: 0%;
+}
+
+.my-gbtn {
+    margin-bottom: 20%;
+    margin-right: 10%;
+    min-width: 200px;
+    color: white !important;
+}
+
+.my-rep-btn ~ .my-rep-btn {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.my-rep-btn {
+    margin: 5%;
+    min-width: 250px;
+}
+
+.my-card {
+    margin-top: 25%;
+    margin-bottom: 25%;
+    height: 50%;
+}
+
+.rep-card {
+    margin-top: 25%;
+    margin-bottom: 25%;
+    height: 50%;
+    padding: 5%;
+}
+
+.my-card-content {
+    margin: 20% auto;
+}
+
+.rep-card-content {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.top-words {
+    display: inline;
+}
+
+.upload-card {
+    margin-top: 5%;
+}
+
+.upload-error {
+    margin-top: 15px;
+    color: #ef5350;
+}
+
+.rep-word-stats {
+    display: inline;
+    white-space: nowrap;
+}
+
+.top-clip{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rep-p,  .rep-num{
+    float: left;
+    width: 50%;
+}
+
+.rep-p {
+    font-weight: 700;
+    text-align: left;
+}
+
+.rep-num{
+    text-align: right;
+}
+
+.rep-card-word-content {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.top-words {
+    display: inline;
+}
+
+.group-card {
+    margin-top: 10%;
+}
+
+.group-card-content {
+    margin: 3% 5%;
+}
+
+.group-stat-card-content {
+    margin: 3% 2%;
+}
+
+.group-card h6 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #26a69a;
+}
+
+.group-stats-header {
+    font-size: 2em !important;
+    margin-bottom: 20px !important;
+}
+
+td {
+    text-align: center;
+    vertical-align: top;
+}
+
+th {
+    text-align: center;
+    vertical-align: top;
+}
+
+.my-table thead {
+    background-color: #4db6ac;
+}
+
+.my-table tr[onclick]:hover {
+    cursor: pointer;
+}
+
+.table-container{
+    height: 300px;
+    overflow: auto;
+}
+
+.group-stat-card-content form {
+    height: 350px;
+}
+
+@keyframes flash{
+    from {
+        opacity: 0;
+    }
+
+    25% {
+        transform: scale(1.02);
+    }
+
+    90% {
+        transform: scale(1.0);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.card {
+    animation: flash 0.6s linear !important;
+    -webkit-animation: flash 0.6s linear !important;
+}
