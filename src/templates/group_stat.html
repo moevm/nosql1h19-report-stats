@@ -34,9 +34,9 @@
                                             </thead>
                                             <tbody id="stats-table-body">
                                                 {% for person in data %}
-                                                    <tr onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
+                                                    <tr>
                                                         <td>
-                                                            {{ person['_id'] }}
+                                                            <a href="/groups/{{ group_num }}/{{ person['_id'] }}">{{ person['_id'] }}</a>
                                                         </td>
                                                         <td>
                                                             {{ person['avg_total_words'] }}
