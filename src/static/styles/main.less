@@ -12,6 +12,23 @@
     min-width: 250px;
 }
 
+.gbtn-group {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.my-gbtn ~ .my-gbtn {
+    margin-right: 0%;
+}
+
+.my-gbtn {
+    margin-bottom: 20%;
+    margin-right: 10%;
+    min-width: 200px;
+    color: white !important;
+}
+
 .my-rep-btn ~ .my-rep-btn {
     margin-bottom: 0;
     margin-top: 0;
@@ -64,7 +81,7 @@
 
 .top-clip{
     overflow: hidden;
-    text-overflow: clip;
+    text-overflow: ellipsis;
 }
 
 .rep-p,  .rep-num{
@@ -98,10 +115,19 @@
     margin: 3% 5%;
 }
 
+.group-stat-card-content {
+    margin: 3% 2%;
+}
+
 .group-card h6 {
     font-size: 2em;
     margin-bottom: 20px;
     color: #26a69a;
+}
+
+.group-stats-header {
+    font-size: 2em !important;
+    margin-bottom: 20px !important;
 }
 
 td {
@@ -125,4 +151,31 @@ th {
 .table-container{
     height: 300px;
     overflow: auto;
+}
+
+.group-stat-card-content form {
+    height: 350px;
+}
+
+@keyframes flash{
+    from {
+        opacity: 0;
+    }
+
+    25% {
+        transform: scale(1.02);
+    }
+
+    90% {
+        transform: scale(1.0);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.card {
+    animation: flash 0.6s linear !important;
+    -webkit-animation: flash 0.6s linear !important;
 }

@@ -1,5 +1,6 @@
 from bson import ObjectId
 from flask import Flask, render_template, request, redirect, url_for, session, json, send_file
+from flask_less import lessc
 
 from database.report import Report
 from database.reports_data_base import ReportsDataBase
@@ -15,6 +16,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 app.text_processor = TextProcessor()
 
+lessc(app=app)
 
 @app.route('/')
 def main_page():

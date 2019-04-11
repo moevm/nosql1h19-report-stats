@@ -3,17 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Статистика группы {{ group_num }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    {{ cssify('../static/styles/main.less') }}
 </head>
 <body>
-<h1>{{ group_num }}</h1>
-<form action="/groups/{{ group_num }}" method="post" enctype="multipart/form-data">
-    {% for person in data %}
-        <input type="checkbox" name="compare_{{ person['_id'] }}" value="{{ person['_id'] }}">
-        <div>{{ person }}</div>
-        <br>
-    {% endfor %}
-    <button id="submit" type="submit">Сравнить</button>
-</form>
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 center-align">
+                <div class="card white h-100 group-card">
+                    <div class="group-stat-card-content">
+                            <h5 class="group-stats-header">Статистика группы {{ group_num }}</h5>
+                                <form class="stats-form" action="/groups/{{ group_num }}" method="post" enctype="multipart/form-data">
+                                    <div class="table-container">
+                                        <table id="stats-table" class="table table-hover table-bordered my-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ф.И.О.</th>                                                
+                                                    <th>Всего слов в среднем</th>
+                                                    <th>Уникальных слов в среднем</th>                                                
+                                                    <th>Процент уникальных слов</th>
+                                                    <th>Всего уникальных слов</th>
+                                                    <th>В среднем символов</th>
+                                                    <th>Отчетов загружено</th>
+                                                    <th>Сравнение</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="stats-table-body">
+                                                {% for person in data %}
+                                                    <tr>
+                                                        <td>
+                                                            {{ person['_id'] }}
+                                                        </td>
+                                                        <td>
+                                                            {{ person['avg_total_words'] }}
+                                                        </td>
+                                                        <td>
+                                                            {{ person['avg_unique_words'] }}
+                                                        </td>
+                                                        <td>
+                                                            {{ person['avg_persent_unique_words'] | round(2, 'common') }}
+                                                        </td>
+                                                        <td>
+                                                            {{ person['total_unique_words'] }}
+                                                        </td>
+                                                        <td>
+                                                            {{ person['avg_total_raw_symbols'] }}
+                                                        </td>
+                                                        <td>
+                                                            {{ person['total_reports_loaded'] }}
+                                                        </td>
+                                                        <td>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" name="compare_{{ person['_id'] }}" value="{{ person['_id'] }}">
+                                                                <span></span>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="gbtn-group">
+                                        <a class="waves-effect waves-light btn-large my-gbtn" onclick="window.location='/groups';">Назад к группам</a>
+                                        <button class="btn-large waves-effect waves-light grey darken-2 my-gbtn" id="submit" type="submit">Сравнить</button>
+                                    </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="../static/js/group_stats.js"></script>
 </body>
 </html>

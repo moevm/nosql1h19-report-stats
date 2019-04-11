@@ -8,7 +8,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../static/styles/styles.css">
+    {{ cssify('../static/styles/main.less') }}
 </head>
 <body>
 
@@ -94,7 +94,7 @@
                             let row = '<tr onclick="window.location=' + " ' " + '/groups/' + json[i]['_id'] + " ' " + '"><td>' + (i+1) + '</td><td>' + json[i]['_id'] + '</td><td>'
                                 + json[i]['avg_persent_unique_words'].toFixed(0) + '</td><td>'
                                 + json[i]['avg_total_words'].toFixed(0) + '</td><td>'
-                                + json[i]['avg_unique_words'].toFixed() + '</td><td>'
+                                + json[i]['avg_unique_words'].toFixed(0) + '</td><td>'
                                 + json[i]['total_reports_loaded'] + '</td></tr>';
                             $('#stats-table-body').append(row);
                         }
