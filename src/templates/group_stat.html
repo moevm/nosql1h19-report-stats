@@ -34,7 +34,7 @@
                                             </thead>
                                             <tbody id="stats-table-body">
                                                 {% for person in data %}
-                                                    <tr>
+                                                    <tr onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
                                                         <td>
                                                             {{ person['_id'] }}
                                                         </td>
