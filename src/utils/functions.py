@@ -88,7 +88,9 @@ def save_file(file, path):
 
 
 def build_bar_graph(info):
-    prefix = 'bar_graphs'
+    _, tail = os.path.split(os.getcwd())
+    prefix = 'bar_graphs' if tail == 'src' else 'src/bar_graph'
+
     shutil.rmtree(prefix, ignore_errors=True)
     if not os.path.exists(prefix):
         os.makedirs(prefix)
