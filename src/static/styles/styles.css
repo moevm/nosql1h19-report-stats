@@ -157,8 +157,8 @@ th {
     height: 350px;
 }
 
-#stats-table-body a{
-    color: #26a69a;
+.td-link {
+    cursor: pointer;
 }
 
 @keyframes flash{
