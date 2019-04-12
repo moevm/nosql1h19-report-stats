@@ -223,7 +223,7 @@ def get_image(group_num, person, report_id):
         image_name = build_bar_graph(report['words']['most_popular_words'])
         return send_file(image_name, mimetype='image/gif')
     except:
-        return None
+        return '', 204
 
 
 @app.route('/edit/<report_id>', methods=['GET', 'POST'])
