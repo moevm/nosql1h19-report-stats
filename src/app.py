@@ -76,7 +76,7 @@ def groups_page():
         render_template('groups.html',
                         msg='Невозможно получить список факультетов/кафедр/групп')
 
-    create_selectors = lambda x: ['Любой'] + sorted(x) if x else ['Любой']
+    create_selectors = lambda x: ['Любой'] + x if x else ['Любой']
 
     return render_template('groups.html',
                            faculties=create_selectors(faculties),
