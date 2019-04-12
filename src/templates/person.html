@@ -15,20 +15,21 @@
         <div class="row align-items-center h-100">
             <div class="col"></div>
             <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 center-align">
-                <div class="card white h-100 rep-card">
-                    <div class="rep-card-content">
+                <div class="card white h-100 person-card" style="margin-top: 15%;">
+                    <div class="person-card-content">
                         <div class="rep-card-word-content">
-                            <h6>{{ person }}</h6>
-                            <div class="rep-word-stats"><p class="rep-p">Всего в среднем слов:</p><p class="rep-num">{{ total_person_stat['avg_total_words'] | round(2, 'common')}}</p></div>
-                            <div class="rep-word-stats"><p class="rep-p">Всего уникальных слов:</p> <p class="rep-num">{{ total_person_stat['total_unique_words'] | round(2, 'common')}}</p></div>
-                            <div class="rep-word-stats"><p class="rep-p">В среднем уникальных слов:</p> <p class="rep-num">{{ total_person_stat['avg_unique_words'] | round(2, 'common')}}</p></div>
-                            <div class="rep-word-stats"><p class="rep-p">Процент уникальных слов:</p> <p class="rep-num">{{ total_person_stat['avg_persent_unique_words'] | round(2, 'common') }}</p></div>
+                            <h6 class="person-name">{{ person }}</h6>
+                            
+                            <div class="rep-word-stats"><p class="rep-p">Словарный запас:</p> <p class="rep-num">{{ total_person_stat['total_unique_words'] | round(2, 'common')}}</p></div>
+                            
                             <div class="rep-word-stats"><p class="rep-p">Символов в среднем:</p> <p class="rep-num">{{ total_person_stat['avg_total_raw_symbols'] | round(2, 'common') }}</p></div>
-                            <div class="rep-word-stats"><p class="rep-p">Чистых cимволов в среднем:</p> <p class="rep-num">{{ total_person_stat['avg_total_clean_symbols'] | round(2, 'common') }}</p></div>
+                            
                             <div class="rep-word-stats"><p class="rep-p">Всего загружено отчетов:</p> <p class="rep-num">{{ total_person_stat['total_reports_loaded'] | round(2, 'common') }}</p></div>
-                        </div>
 
-                                <table id="stats-table" class="table table-hover table-bordered my-table">
+                            <h6 style="font-size: 1.5em;">Отчеты</h6>
+                        </div>
+                            <div class="person-table-cont">
+                                <table class="table table-hover table-bordered my-table">
                                     <thead>
                                         <tr>
                                             <th>Название</th>                                                
@@ -37,7 +38,7 @@
                                             <th>Процент уникальных слов</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="stats-table-body">
+                                    <tbody>
                                         {% for report in report_stat %}
                                             <tr onclick="window.location='/groups/{{ group_num }}/{{ person }}/{{ report['id'] }}'">
                                                 <td>
@@ -56,6 +57,7 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                            </div>    
                     </div>
                 </div>
             </div>

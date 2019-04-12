@@ -161,6 +161,22 @@ th {
     cursor: pointer;
 }
 
+.person-card-content {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.person-name {
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: 300;
+}
+
+.person-table-cont {
+    height: 300px;
+    overflow: auto;
+}
+
 @keyframes flash{
     from {
         opacity: 0;
