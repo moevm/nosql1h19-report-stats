@@ -7,9 +7,9 @@ class Report:
         self.date = self.document.core_properties.modified
         self.title = meta['title']
         self.author = meta['author']
-        self.group = meta['group']
+        self.group = int(meta['group'])
         self.department = meta['department']
-        self.course = meta['course']
+        self.course = int(meta['course'])
         self.faculty = meta['faculty']
         
         raw_text = ' '.join([par.text for par in self.document.paragraphs])
