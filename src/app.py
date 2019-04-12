@@ -221,7 +221,7 @@ def get_image(group_num, person, report_id):
         report = app.db.get_report_stat_by_id(ObjectId(report_id))
 
         image_name = build_bar_graph(report['words']['most_popular_words'])
-        return send_file(image_name, mimetype='image/gif')
+        return send_file(image_name, mimetype='image/png')
     except:
         return '', 204
 
