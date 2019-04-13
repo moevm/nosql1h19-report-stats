@@ -39,19 +39,19 @@
                                                             {{ person['_id'] }}
                                                         </td>
                                                         <td class="td-link" onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
-                                                            {{ person['avg_total_words'] }}
+                                                            {{ person['avg_total_words'] | round(2, 'common') }}
                                                         </td>
                                                         <td class="td-link" onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
-                                                            {{ person['avg_unique_words'] }}
+                                                            {{ person['avg_unique_words'] | round(2, 'common')}}
                                                         </td>
                                                         <td class="td-link" onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
                                                             {{ person['avg_persent_unique_words'] | round(2, 'common') }}
                                                         </td>
                                                         <td class="td-link" onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
-                                                            {{ person['total_unique_words'] }}
+                                                            {{ person['total_unique_words'] | round(2, 'common') }}
                                                         </td>
                                                         <td class="td-link" onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
-                                                            {{ person['avg_total_raw_symbols'] }}
+                                                            {{ person['avg_total_raw_symbols'] | round(2, 'common') }}
                                                         </td>
                                                         <td class="td-link" onclick="window.location='/groups/{{ group_num }}/{{ person['_id'] }}'">
                                                             {{ person['total_reports_loaded'] }}
