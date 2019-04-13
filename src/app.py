@@ -209,9 +209,9 @@ def report_page(group_num, person, report_id):
     try:
         report = app.db.get_report_stat_by_id(ObjectId(report_id))
         return render_template('report.html', title=report['title'], data=report)
-    except:
+    except Exception as e:
         return render_template('error_page.html',
-                               msg=f'Невозможно получить статистику по отчету')
+                               msg=e)
 
 
 @app.route('/groups/<int:group_num>/<person>/<report_id>/bar_graph')
@@ -222,8 +222,8 @@ def get_image(group_num, person, report_id):
 
         image_name = build_bar_graph(report['words']['most_popular_words'])
         return send_file(image_name, mimetype='image/png')
-    except:
-        return '', 204
+    except Exception as e:
+        return render_template('error_page.html', msg=e)
 
 
 @app.route('/edit/<report_id>', methods=['GET', 'POST'])

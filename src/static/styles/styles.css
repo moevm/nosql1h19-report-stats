@@ -16,6 +16,7 @@
     width: 100%;
     margin: 0 auto;
     text-align: center;
+    white-space: nowrap;
 }
 
 .my-gbtn ~ .my-gbtn {
@@ -175,6 +176,41 @@ th {
 .person-table-cont {
     height: 300px;
     overflow: auto;
+}
+
+.report-card-content {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.image-container {
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    margin-left: -30px;
+    margin-top: -25px;
+}
+
+.report-card {
+    margin-top: 3%;
+}
+
+.report-card-content h6 {
+    font-size: 2em;
+}
+
+@media only screen and (min-height: 800px) {
+    .report-card {
+        margin-top: 10%;
+    }
+}
+
+@media only screen and (min-height: 1000px) {
+    .report-card {
+        margin-top: 15%;
+    }
 }
 
 @keyframes flash{

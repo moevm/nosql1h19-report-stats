@@ -19,9 +19,11 @@
                     <div class="person-card-content">
                         <div class="rep-card-word-content">
                             <h6 class="person-name">{{ person }}</h6>
-                            
+
                             <div class="rep-word-stats"><p class="rep-p">Словарный запас:</p> <p class="rep-num">{{ total_person_stat['total_unique_words'] | round(2, 'common')}}</p></div>
                             
+                            <div class="rep-word-stats"><p class="rep-p">Слов в среднем:</p> <p class="rep-num">{{ total_person_stat['avg_total_words'] | round(2, 'common')}}</p></div>
+
                             <div class="rep-word-stats"><p class="rep-p">Символов в среднем:</p> <p class="rep-num">{{ total_person_stat['avg_total_raw_symbols'] | round(2, 'common') }}</p></div>
                             
                             <div class="rep-word-stats"><p class="rep-p">Всего загружено отчетов:</p> <p class="rep-num">{{ total_person_stat['total_reports_loaded'] | round(2, 'common') }}</p></div>

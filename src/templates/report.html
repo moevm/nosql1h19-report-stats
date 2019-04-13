@@ -3,23 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Статистика по отчету {{ title }}</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script><body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="../../../static/styles/styles.css">
 </head>
 <body>
-<h1>{{ title }}</h1>
-<div> {{ data }} </div>
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <div class="col"></div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                <div class="card white h-100 report-card">
+                    <div class="report-card-content center-align">
+                        <h6>{{ title }}</h6>
+                        <div class="rep-card-word-content">
+                        
+                            <div class="rep-word-stats"><p class="rep-p">Слов:</p> <p class="rep-num">{{ data['words']['total_words'] }}</p></div>
+                            
+                            <div class="rep-word-stats"><p class="rep-p">Уникальных слов:</p> <p class="rep-num">{{ data['words']['total_unique_words'] }}</p></div>
 
-<div id="image"></div>
-<script>
-    var img = $("<img />").attr('src', '{{ data['_id'] }}/bar_graph')
-    .on('load', function() {
-        if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
-            alert('broken image!');
-        } else {
-            $("#image").append(img);
-        }
-    });
-</script>
-<button onclick="window.location='/edit/{{ data['_id'] }}';">Редактировать отчет</button>
+                            <div class="rep-word-stats"><p class="rep-p">Процент:</p> <p class="rep-num">{{ data['words']['persent_unique_words'] | round(2, 'common') }}</p></div>
+                            
+                        </div>
+                    </div>
+                    <div class="image-container">
+                            <div id="image"></div>
+                    </div>
+                    <div class="report-card-content center-align">
+                            <button class="waves-effect waves-light btn-large my-gbtn" onclick="window.location='/groups/{{ data['group'] }}/{{ data['author'] }}'"
+                                style="margin-bottom: 20px;">К студенту</button>
+                            <button class="btn-large waves-effect waves-light grey darken-2 my-gbtn"
+                                onclick="window.location='/edit/{{ data['_id'] }}';" style="margin-bottom: 20px;">Редактировать отчет</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var img = $("<img />").attr('src', '{{ data['_id'] }}/bar_graph')
+        .on('load', function() {
+            if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                alert('broken image!');
+            } else {
+                $("#image").append(img);
+            }
+        });
+    </script>
+
 </body>
 </html>
