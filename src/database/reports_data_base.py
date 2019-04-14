@@ -187,8 +187,7 @@ class ReportsDataBase:
 
         match = {
             '$match': {
-                '$and':
-                    [
+                '$and': [
                         {'group': group},
                         {'$or': match_list}
                     ]
@@ -197,7 +196,7 @@ class ReportsDataBase:
 
         query = self.db['reports'].aggregate([
             match,
-            {'$group:': {
+            {'$group': {
                 '_id': '$author', 
                 'unique_words': {'$addToSet': '$words.unique_words'}
             }},
@@ -214,24 +213,24 @@ class ReportsDataBase:
             {'$sort': {'_id': 1}}
         ])
 
+        authors = list(query)
         compare = {}
 
-        for author in query:
+        for author in authors:
             compare[author['_id']] = dict()
 
-            for other_author in query:
+            for other_author in authors:
                 if other_author['_id'] == author['_id']:
                     compare[author['_id']][author['_id']] = float('nan')
                 else:
-                    author_unique_words = set(author['unique_words']),
+                    author_unique_words = set(author['unique_words'])
                     other_author_unique_words = set(other_author['unique_words'])
 
                     author_num_unique_words = len(author_unique_words)
                     other_author_num_unique_words = len(other_author_unique_words)
 
-                    compare[author['_id']][other_author['_id']] = len(set.intersection(
-                        author_unique_words,
-                        other_author_unique_words
-                    )) / min(author_num_unique_words, other_author_num_unique_words) * 100.0
+                    compare[author['_id']][other_author['_id']] = len(author_unique_words.intersection(
+                        other_author_unique_words)) \
+                        / min(author_num_unique_words, other_author_num_unique_words) * 100.0
 
         return compare
