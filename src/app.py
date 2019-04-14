@@ -153,6 +153,13 @@ def compare_page():
     except:
         return render_template('error_page.html',
                                msg='Некорректные данные для пересечения словарных запасов')
+
+    for person in data:
+        try:
+            validate_path(group_num=group, person=person)
+        except:
+            return render_template('error_page.html',
+                                   msg=f'Студент {person} не найден в группе {group}')
     try:
         res = app.db.get_words_compare(data, group)
     except Exception as e:
