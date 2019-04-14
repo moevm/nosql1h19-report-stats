@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="../static/styles/styles.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="container h-100">
@@ -17,7 +18,10 @@
             <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 center-align">
                 <div class="card white h-100 upload-card">
                     <div class="card-content">
-
+                        <div class="home-span">
+                            <i class="material-icons"
+                                onclick="window.location='/'">home</i>
+                        </div>
                             <form action="/edit/{{ id }}" method="post" enctype="multipart/form-data">
 
                                 <div class="input-field">

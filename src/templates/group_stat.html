@@ -8,6 +8,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles/styles.css">
 </head>
 <body>
@@ -16,6 +17,10 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 center-align">
                 <div class="card white h-100 group-card">
                     <div class="group-stat-card-content">
+                        <div class="home-span">
+                            <i class="material-icons"
+                                onclick="window.location='/'">home</i>
+                        </div>
                             <h5 class="group-stats-header">Статистика группы {{ group_num }}</h5>
                                 <form class="stats-form" action="/groups/{{ group_num }}" method="post" enctype="multipart/form-data">
                                     <div class="table-container">
@@ -26,7 +31,7 @@
                                                     <th>Всего слов в среднем</th>
                                                     <th>Уникальных слов в среднем</th>                                                
                                                     <th>Процент уникальных слов</th>
-                                                    <th>Всего уникальных слов</th>
+                                                    <th>Словарный запас</th>
                                                     <th>В среднем символов</th>
                                                     <th>Отчетов загружено</th>
                                                     <th>Сравнение</th>

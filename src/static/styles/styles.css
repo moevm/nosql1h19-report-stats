@@ -201,6 +201,14 @@ th {
     font-size: 2em;
 }
 
+.home-span {
+    text-align: right;
+}
+
+.home-span i {
+    cursor: pointer;
+}
+
 @media only screen and (min-height: 800px) {
     .report-card {
         margin-top: 10%;
