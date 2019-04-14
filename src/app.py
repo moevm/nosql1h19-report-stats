@@ -245,7 +245,6 @@ def edit_page(report_id):
 
         if code == 'OK':
             if 'file' not in request.files.keys() or request.form['file'] == '':
-                print(report_id, serialized_meta(request.form))
                 app.db.update_report(ObjectId(report_id), serialized_meta(request.form))
                 return redirect(f'/groups/{request.form["group"]}/{request.form["author"]}/{report_id}')
             else:

@@ -75,15 +75,12 @@ def save_file(file, path):
         os.makedirs(path)
 
     filename = file.filename
-    print(f'[+] Saving file: {filename}')
     path = os.path.join(path, filename)
     try:
         file.save(path)
-        print(f'[+] Saved file: {path}')
         return path
 
     except:
-        print(f'[-] File {path} not saved. Error return.')
         raise OSError("Can't save file")
 
 
