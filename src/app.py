@@ -149,7 +149,7 @@ def group_stat_page(group_num):
 def compare_page():
     try:
         data = request.args.getlist('persons')
-        group = request.args.get('group')
+        group = int(request.args.get('group'))
     except:
         return render_template('error_page.html',
                                msg='Некорректные данные для пересечения словарных запасов')
