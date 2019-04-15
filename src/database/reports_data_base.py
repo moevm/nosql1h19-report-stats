@@ -51,15 +51,12 @@ class ReportsDataBase:
         return self.db['reports'].find_one({'_id': report_id})
 
     def get_report_stat_by_id(self, report_id):
-        report = self.get_report_by_id(report_id)
-        
-        report.pop('text', None)
-        report['words'].pop('unique_words', None)
-
-        return report
+        return self.db['reports'].find_one({'_id': report_id}, 
+        {'text': 0, 'words.unique_words': 0})
 
     def get_report_top_words_by_id(self, report_id, num_words):
-        report = self.get_report_by_id(report_id)
+        report = self.db['reports'].find_one({'_id': report_id}, 
+        {'words.most_popular_words': 1})
 
         if len(report['words']['most_popular_words']) < num_words:
             return report['words']['most_popular_words']
