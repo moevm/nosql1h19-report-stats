@@ -58,6 +58,14 @@ class ReportsDataBase:
 
         return report
 
+    def get_report_top_words_by_id(self, report_id, num_words):
+        report = self.get_report_by_id(report_id)
+
+        if len(report['words']['most_popular_words']) < num_words:
+            return report['words']['most_popular_words']
+        else:
+            return report['words']['most_popular_words'][:num_words - 1]
+
     def get_reports_by_author(self, author):
         for report in self.db['reports'].find({'author': author}).sort('title'):
             yield report
