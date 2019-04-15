@@ -225,6 +225,10 @@ th {
     color: #26a69a;
 }
 
+.btn-group {
+    margin: 0 auto;
+}
+
 @media only screen and (min-height: 800px) {
     .report-card {
         margin-top: 10%;
