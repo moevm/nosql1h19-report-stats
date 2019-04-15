@@ -5,6 +5,7 @@ from database.report import Report
 from database.reports_data_base import ReportsDataBase
 from database.text_processor import TextProcessor
 from utils.functions import *
+from math import isnan
 
 app = Flask(__name__)
 app.secret_key = generate_secret_key()
@@ -166,7 +167,7 @@ def compare_page():
         return render_template('error_page.html',
                                msg=f'persons:{data}, group:{group}, error:{e} ')
 
-    return render_template('compare.html', data=res)
+    return render_template('compare.html', data=res, isnan=isnan)
 
 
 @app.route('/groups/<int:group_num>/<person>')

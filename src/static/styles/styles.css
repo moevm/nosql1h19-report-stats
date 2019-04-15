@@ -209,6 +209,22 @@ th {
     cursor: pointer;
 }
 
+.compare-card {
+    margin-top: 5%;
+}
+
+.compare-card-content {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.compare-card-content h6 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #26a69a;
+}
+
 @media only screen and (min-height: 800px) {
     .report-card {
         margin-top: 10%;
