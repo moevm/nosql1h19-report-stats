@@ -1,8 +1,12 @@
+import subprocess
+
 import pymongo
 
 class ReportsDataBase:
     def __init__(self, url, db_name):
-        self.db = pymongo.MongoClient(url)[db_name]
+        self.db_name = db_name
+
+        self.db = pymongo.MongoClient(url)[self.db_name]
 
         self.db['reports'].create_index('group')
         self.db['reports'].create_index('author')
@@ -18,6 +22,30 @@ class ReportsDataBase:
             ('faculty', pymongo.ASCENDING), 
             ('department', pymongo.ASCENDING)
         ])
+
+    def export_reports_collection(self, file_name):
+        result = subprocess.run(['mongoexport', 
+        '--pretty',
+        '--jsonArray',
+        f'--db={self.db_name}',
+        '--collection=reports',
+        f'--out={file_name}.json'])
+
+        if result.returncode == 0:
+            return f'{file_name}.json'
+        else:
+            raise ChildProcessError(f'mongoexport error return code [{result.returncode}]')
+
+    def import_reports_collection(self, file_name):
+        result = subprocess.run(['mongoimport',
+        '--jsonArray',
+        '--mode=merge',
+        f'--db={self.db_name}',
+        '--collection=reports',
+        f'--file={file_name}'])
+
+        if result.returncode != 0:
+            raise ChildProcessError(f'mongoimport error return code [{result.returncode}]')
 
     def _drop_reports(self):
         self.db['reports'].drop()
