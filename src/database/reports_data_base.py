@@ -91,8 +91,8 @@ class ReportsDataBase:
         else:
             return report['words']['most_popular_words'][:num_words - 1]
 
-    def get_reports_by_author(self, author):
-        for report in self.db['reports'].find({'author': author}).sort('title'):
+    def get_reports_by_author(self, author, group):
+        for report in self.db['reports'].find({'author': author, 'group': group}).sort('title'):
             yield report
 
     def get_reports_by_group(self, group):
