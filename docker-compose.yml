@@ -1,0 +1,12 @@
+web:
+  build: .
+  command: python app.py
+  ports:
+    - "5000:5000"
+  links:
+    - mongodb
+
+mongodb:
+  image: mongo:latest
+  volumes:
+    - nosql1h19-report-stats-data:/data/db
