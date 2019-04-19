@@ -187,7 +187,7 @@ def person_stat_page(group_num, person):
 
     try:
         report_stat = []
-        for report in app.db.get_reports_by_author(person):
+        for report in app.db.get_reports_by_author(person, group_num):
             report_stat.append({
                 'id': report['_id'],
                 'title': report['title'],
