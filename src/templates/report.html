@@ -8,6 +8,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link rel="stylesheet" href="../../../static/styles/styles.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -34,7 +35,7 @@
                         </div>
                     </div>
                     <div class="image-container">
-                            <div id="image"></div>
+                            <div id="chart" style="margin: 15px"></div>
                     </div>
                     <div class="report-card-content center-align">
                             <button class="waves-effect waves-light btn-large my-gbtn" onclick="window.location='/groups/{{ data['group'] }}/{{ data['author'] }}'"
@@ -48,14 +49,31 @@
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        var img = $("<img />").attr('src', '{{ data['_id'] }}/bar_graph')
-        .on('load', function() {
-            if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
-                alert('broken image!');
-            } else {
-                $("#image").append(img);
-            }
+    <script type="text/javascript">
+        function create_bar() {
+            $.getJSON('{{ data['_id'] }}/bar_graph', function(json){
+                google.charts.load('current', {'packages':['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+
+                function drawStuff() {
+                    json.unshift(['Слова', 'Количество']);
+                    var data = new google.visualization.arrayToDataTable(json);
+                    var options = {
+                        title: 'Топ слова',
+                        legend: { position: 'none' },
+                        hAxis: {title: 'Количество',  titleTextStyle: {color: '#314ef4'}},
+                        height: 500,
+                    };
+
+                    var chart = new google.charts.Bar(document.getElementById('chart'));
+                    chart.draw(data, options);
+                };
+            });
+        }
+
+        create_bar();
+        $(window).resize(function(){
+            create_bar();
         });
     </script>
 

@@ -1,12 +1,4 @@
 import os
-import shutil
-from time import gmtime, strftime
-
-import matplotlib.pyplot as plt
-plt.rcdefaults()
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 
 def validate_input(data, is_empty_file=False):
@@ -82,35 +74,6 @@ def save_file(file, path):
 
     except:
         raise OSError("Can't save file")
-
-
-def build_bar_graph(info):
-    _, tail = os.path.split(os.getcwd())
-    prefix = 'bar_graphs' if tail == 'src' else 'src/bar_graph'
-
-    shutil.rmtree(prefix, ignore_errors=True)
-    if not os.path.exists(prefix):
-        os.makedirs(prefix)
-
-    words_stat = list(reversed(info[:10 if len(info) > 10 else len(info)]))
-
-    words = list(map(lambda x: x[0], words_stat))
-    stat = list(map(lambda x: x[1], words_stat))
-    y_pos = np.arange(len(words))
-
-    fig = plt.figure()
-    plt.gcf().subplots_adjust(left=0.2)
-    plt.rc('ytick', labelsize=8)
-
-    plt.barh(y_pos, stat, align='center')
-    plt.yticks(y_pos, words)
-    plt.xlabel('Количество')
-    plt.title('Самые популярные слова')
-
-    image_name = prefix + f'/image_{strftime("%Y_%m_%d_%H_%M_%S", gmtime())}.png'
-    fig.savefig(image_name)
-
-    return image_name
 
 
 if __name__ == '__main__':

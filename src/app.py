@@ -223,15 +223,12 @@ def report_page(group_num, person, report_id):
 
 
 @app.route('/groups/<int:group_num>/<person>/<report_id>/bar_graph')
-def get_image(group_num, person, report_id):
+def get_plot_data(group_num, person, report_id):
     try:
         validate_path(group_num=group_num, person=person, report_id=report_id)
-        report = app.db.get_report_stat_by_id(ObjectId(report_id))
-
-        image_name = build_bar_graph(report['words']['most_popular_words'])
-        return send_file(image_name, mimetype='image/png')
-    except Exception as e:
-        return render_template('error_page.html', msg=e)
+        return json.dumps(app.db.get_report_top_words_by_id(ObjectId(report_id), 6))
+    except:
+        return json.dumps({})
 
 
 @app.route('/edit/<report_id>', methods=['GET', 'POST'])
