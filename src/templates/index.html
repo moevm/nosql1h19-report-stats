@@ -21,8 +21,13 @@
                         <br>
                         <button class="btn-large waves-effect waves-light my-btn" onclick="window.location='/groups';">Просмотр статистики</button>
                         <div class=" mbtn-group" style="padding-top: 17%;">
-                            <button class="btn-large waves-effect waves-light grey darken-2 mbtn">Импорт</button>
-                            <button class="btn-large waves-effect waves-light grey darken-2 mbtn">Экспорт</button>
+                            <input id="fileInput" type="file" style="display:none;" />
+
+                            <form action="/import" method="post" enctype="multipart/form-data">
+                                <input id="file" type="file" name=file onchange="this.form.submit();" style="display: none"/>
+                                <input type="button" value="Импорт" onclick="document.getElementById('file').click();" class="btn-large waves-effect waves-light grey darken-2 mbtn" />
+                            </form>
+                            <a class="btn-large waves-effect waves-light grey darken-2 mbtn" role="button" href="/export" download="db_export.json">Экспорт</a>
                         </div>
                     </div>
                 </div>

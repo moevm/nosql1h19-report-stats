@@ -283,5 +283,31 @@ def logout():
     return redirect(url_for('main_page'))
 
 
+@app.route('/export')
+def export_page():
+    try:
+        name = 'export_db'
+        open(f'{name}.json', 'w').close()
+
+        new_filename = app.db.export_reports_collection(name)
+        return send_file(new_filename, mimetype='application/json')
+
+    except:
+        return render_template('error_page.html', msg='Невозможно выполнить экспорт')
+
+
+@app.route('/import', methods=['POST'])
+def import_page():
+    if request.method == 'POST':
+        try:
+            name = 'import_db'
+            open(f'{name}.json', 'w').close()
+            request.files['file'].save(f'{name}.json')
+            app.db.import_reports_collection(name)
+            return redirect(url_for('main_page'))
+        except Exception as e:
+            return render_template('error_page.html', msg='Ошибка импорта. Попробуйте другой файл.')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

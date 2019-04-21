@@ -42,7 +42,7 @@ class ReportsDataBase:
         '--mode=merge',
         f'--db={self.db_name}',
         '--collection=reports',
-        f'--file={file_name}'])
+        f'--file={file_name}.json'])
 
         if result.returncode != 0:
             raise ChildProcessError(f'mongoimport error return code [{result.returncode}]')
