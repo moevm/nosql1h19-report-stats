@@ -4,4 +4,7 @@ src/__pycache__/
 *.xml
 *.pyc
 *.iml
-src/bar_graphs/*
+
+# Import, export
+src/export_db.json
+src/import_db.json
