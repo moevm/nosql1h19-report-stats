@@ -183,14 +183,9 @@ th {
     margin: 0 auto;
 }
 
-.image-container {
+.graph-container {
     overflow: hidden;
-}
-
-.image-container img {
-    width: 100%;
-    margin-left: -30px;
-    margin-top: -25px;
+    padding: 25px;
 }
 
 .report-card {
@@ -233,6 +228,7 @@ th {
     text-decoration: none !important;
     color: white;
 }
+
 
 @media only screen and (min-height: 800px) {
     .report-card {

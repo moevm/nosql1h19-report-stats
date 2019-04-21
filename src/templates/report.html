@@ -34,8 +34,14 @@
                             
                         </div>
                     </div>
-                    <div class="image-container">
-                            <div id="chart" style="margin: 15px"></div>
+                    <div class="graph-container">
+                        <div id="chart">
+                            <div class="center-align" style="margin-top: 25px;">
+                                <div class="progress">
+                                    <div class="indeterminate"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="report-card-content center-align">
                             <button class="waves-effect waves-light btn-large my-gbtn" onclick="window.location='/groups/{{ data['group'] }}/{{ data['author'] }}'"
