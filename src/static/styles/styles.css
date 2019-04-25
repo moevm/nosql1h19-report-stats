@@ -3,6 +3,19 @@
     padding: 0;
 }
 
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: space;
+    background-attachment: fixed;
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+}
+
 .my-btn ~ .my-btn {
     margin-bottom: 0%;
 }

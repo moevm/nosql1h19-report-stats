@@ -30,11 +30,9 @@
                             
                             <div class="rep-word-stats"><p class="rep-p">Уникальных слов:</p> <p class="rep-num">{{ data['words']['total_unique_words'] }}</p></div>
 
-                            <div class="rep-word-stats"><p class="rep-p">Процент:</p> <p class="rep-num">{{ data['words']['persent_unique_words'] | round(2, 'common') }}</p></div>
+                            <div class="rep-word-stats"><p class="rep-p">Процент уникальных слов:</p> <p class="rep-num">{{ data['words']['persent_unique_words'] | round(2, 'common') }}</p></div>
 
                             <div class="rep-word-stats"><p class="rep-p">Всего символов:</p> <p class="rep-num">{{ data['symbols']['total_raw_symbols'] | round(2, 'common') }}</p></div>
-
-                            <div class="rep-word-stats"><p class="rep-p">Всего чистых символов:</p> <p class="rep-num">{{ data['symbols']['total_clean_symbols'] | round(2, 'common') }}</p></div>
                             
                         </div>
                     </div>
