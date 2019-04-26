@@ -13,7 +13,7 @@ app.secret_key = generate_secret_key()
 UPLOAD_FOLDER = 'reports/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-app.db = ReportsDataBase('mongodb', 'nosql1h19-report-stats')
+app.db = ReportsDataBase('mongodb://localhost:27017/', 'nosql1h19-report-stats')
 app.text_processor = TextProcessor()
 
 
@@ -310,4 +310,4 @@ def import_page():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(debug=True)
