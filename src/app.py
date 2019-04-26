@@ -13,14 +13,13 @@ app.secret_key = generate_secret_key()
 UPLOAD_FOLDER = 'reports/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# !!! Если не в докере то первый аргумент: mongodb://localhost:27017/
 app.db = ReportsDataBase('mongodb', 'nosql1h19-report-stats')
 app.text_processor = TextProcessor()
-
 
 @app.route('/')
 def main_page():
     return render_template('index.html')
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_page():
@@ -55,7 +54,6 @@ def upload_page():
         else:
             return render_template('upload.html', data=request.form)
 
-
 @app.route('/report_stat/<id_>')
 def report_stat_page(id_):
     try:
@@ -65,7 +63,6 @@ def report_stat_page(id_):
     except:
         return render_template('error_page.html',
                                msg='Невозможно получить статистку по загруженному отчету')
-
 
 @app.route('/groups')
 def groups_page():
@@ -84,7 +81,6 @@ def groups_page():
                            departments=create_selectors(departments),
                            courses=create_selectors(courses))
 
-
 @app.route('/groups_stat', methods=['GET', 'POST'])
 def return_groups_info():
     try:
@@ -102,7 +98,6 @@ def return_groups_info():
         data[id] = stat
     return json.dumps(data)
 
-
 def validate_path(group_num, person=None, report_id=None):
     groups = app.db.get_stat_by_groups()
     if group_num not in [g['_id'] for g in groups]:
@@ -115,7 +110,6 @@ def validate_path(group_num, person=None, report_id=None):
 
         if report_id is not None:
             reports = app.db.get_report_stat_by_id(ObjectId(report_id))
-
 
 @app.route('/groups/<int:group_num>', methods=['GET', 'POST'])
 def group_stat_page(group_num):
@@ -145,7 +139,6 @@ def group_stat_page(group_num):
                                 persons=[v for _, v in request.form.items()],
                                 group=group_num))
 
-
 @app.route('/compare')
 def compare_page():
     try:
@@ -162,13 +155,13 @@ def compare_page():
             return render_template('error_page.html',
                                    msg=f'Студент {person} не найден в группе {group}')
     try:
-        res = app.db.get_words_compare(data, group)
+        res, words_intersections = app.db.get_words_compare(data, group)
     except Exception as e:
         return render_template('error_page.html',
                                msg=f'persons:{data}, group:{group}, error:{e} ')
 
+    # TODO добавить в data words_intersections
     return render_template('compare.html', data=res, isnan=isnan)
-
 
 @app.route('/groups/<int:group_num>/<person>')
 def person_stat_page(group_num, person):
@@ -205,7 +198,6 @@ def person_stat_page(group_num, person):
                            total_person_stat=total_person_stat,
                            report_stat=report_stat)
 
-
 @app.route('/groups/<int:group_num>/<person>/<report_id>')
 def report_page(group_num, person, report_id):
     try:
@@ -221,7 +213,6 @@ def report_page(group_num, person, report_id):
         return render_template('error_page.html',
                                msg=e)
 
-
 @app.route('/groups/<int:group_num>/<person>/<report_id>/bar_graph')
 def get_plot_data(group_num, person, report_id):
     try:
@@ -229,7 +220,6 @@ def get_plot_data(group_num, person, report_id):
         return json.dumps(app.db.get_report_top_words_by_id(ObjectId(report_id), 6))
     except:
         return json.dumps({})
-
 
 @app.route('/edit/<report_id>', methods=['GET', 'POST'])
 def edit_page(report_id):
@@ -276,12 +266,10 @@ def edit_page(report_id):
         else:
             return render_template('edit.html', id=report_id, data=request.form)
 
-
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('main_page'))
-
 
 @app.route('/export')
 def export_page():
@@ -295,7 +283,6 @@ def export_page():
     except:
         return render_template('error_page.html', msg='Невозможно выполнить экспорт')
 
-
 @app.route('/import', methods=['POST'])
 def import_page():
     if request.method == 'POST':
@@ -308,6 +295,5 @@ def import_page():
         except Exception as e:
             return render_template('error_page.html', msg='Ошибка импорта. Попробуйте другой файл.')
 
-
 if __name__ == '__main__':
-    app.run(ip='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
