@@ -25,6 +25,7 @@ class ReportsDataBase:
 
     def export_reports_collection(self, file_name):
         result = subprocess.run(['mongoexport', 
+        f'--host=mongodb',
         '--pretty',
         '--jsonArray',
         f'--db={self.db_name}',
@@ -38,6 +39,7 @@ class ReportsDataBase:
 
     def import_reports_collection(self, file_name):
         result = subprocess.run(['mongoimport',
+        f'--host=mongodb',
         '--jsonArray',
         '--mode=merge',
         f'--db={self.db_name}',
