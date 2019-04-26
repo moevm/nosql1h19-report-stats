@@ -24,7 +24,7 @@ class ReportsDataBase:
         ])
 
     def export_reports_collection(self, file_name):
-        result = subprocess.run(['mongoexport', 
+        result = subprocess.run(['mongoexport',
         f'--host=mongodb',
         '--pretty',
         '--jsonArray',
@@ -250,6 +250,7 @@ class ReportsDataBase:
 
         authors = list(query)
         compare = {}
+        words_intersections = []
 
         for author in authors:
             compare[author['_id']] = dict()
@@ -264,8 +265,18 @@ class ReportsDataBase:
                     author_num_unique_words = len(author_unique_words)
                     other_author_num_unique_words = len(other_author_unique_words)
 
-                    compare[author['_id']][other_author['_id']] = len(author_unique_words.intersection(
-                        other_author_unique_words)) \
+                    words_intersection = author_unique_words.intersection(other_author_unique_words)
+
+                    compare[author['_id']][other_author['_id']] = len(words_intersection) \
                         / min(author_num_unique_words, other_author_num_unique_words) * 100.0
 
-        return compare
+                    if other_author['_id'] in compare \
+                        and author['_id'] not in compare[other_author['_id']]:
+                        words_intersections.append((
+                            author['_id'],
+                            other_author['_id'],
+                            words_intersection
+                        ))
+
+        # words_intersections = [ (author_name, other_author_name, ['word1', 'word2', 'word3', ...]), .... ]
+        return compare, words_intersections
