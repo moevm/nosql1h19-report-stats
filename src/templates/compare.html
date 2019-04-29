@@ -48,6 +48,22 @@
                                 {% endfor %}
                             </table>
                         </div>
+                        <h6>Общие слова</h6>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                    {% for intersection in words %}
+                                        <tr>
+                                            <td>{{ intersection[0] }}</td>
+                                            <td>{{ intersection[1] }}</td>
+                                            <td>
+                                                {% for word in intersection[2] %}
+                                                    <div class="top-words" href="">{{ word }}</div>
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                            </table>
+                        </div>
                         <div class="btn-group">
                             <a style="min-width: 250px;" class="waves-effect waves-light btn-large my-gbtn" onclick="history.back();">Назад к группам</a>
                         </div>

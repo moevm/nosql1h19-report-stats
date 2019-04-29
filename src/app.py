@@ -161,7 +161,7 @@ def compare_page():
                                msg=f'persons:{data}, group:{group}, error:{e} ')
 
     # TODO добавить в data words_intersections
-    return render_template('compare.html', data=res, isnan=isnan)
+    return render_template('compare.html', data=res, isnan=isnan, words=words_intersections)
 
 @app.route('/groups/<int:group_num>/<person>')
 def person_stat_page(group_num, person):

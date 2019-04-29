@@ -270,13 +270,11 @@ class ReportsDataBase:
                     compare[author['_id']][other_author['_id']] = len(words_intersection) \
                         / min(author_num_unique_words, other_author_num_unique_words) * 100.0
 
-                    if other_author['_id'] in compare \
-                        and author['_id'] not in compare[other_author['_id']]:
-                        words_intersections.append((
-                            author['_id'],
-                            other_author['_id'],
-                            words_intersection
-                        ))
+                    words_intersections.append((
+                        author['_id'],
+                        other_author['_id'],
+                        words_intersection
+                    ))
 
         # words_intersections = [ (author_name, other_author_name, ['word1', 'word2', 'word3', ...]), .... ]
         return compare, words_intersections
